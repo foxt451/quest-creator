@@ -1,33 +1,31 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
+import { useAppSelector, useAppDispatch } from "../store/hooks";
 import queryNames from "../constants/QueryNames";
 import { IQuest } from "shared/interfaces/IQuest";
+import { selectQuests, loadQuests } from "../store/quests/questsSlice";
 import useGQLFetch from "../hooks/useGQLFetch";
 import ErrorBox from "../components/ErrorBox";
 import QuestList from "../components/QuestList";
 
-const QUESTS_QUERY = `
-  query ${queryNames.QUESTS} {
-    quests {
-      id,
-      name,
-      description,
-      image,
-      difficulty,
-      duration
-    }
-  }
-`;
-
 const QuestListPage: FC = () => {
-  const { data, loading, error } = useGQLFetch({ query: QUESTS_QUERY }, []);
+  const dispatch = useAppDispatch();
 
-  if (loading) return <div>Loading...</div>;
-  if (error) {
-    return (
-      <ErrorBox message={`Error: ${error?.message || "please try again"}`} />
-    );
+  const quests = useAppSelector(selectQuests);
+  const questsStatus = useAppSelector((state) => state.quests.status);
+  const questsError = useAppSelector((state) => state.quests.error);
+
+  useEffect(() => {
+    if (questsStatus === "initial") {
+      dispatch(loadQuests());
+    }
+  }, [dispatch, questsStatus]);
+
+  if (questsStatus === "loading") return <div>Loading...</div>;
+  if (questsStatus === "failed") {
+    return <ErrorBox message={`Error: ${questsError || "please try again"}`} />;
   }
-  return <QuestList quests={data.quests} />;
+
+  return <QuestList quests={quests} />;
 };
 
 export default QuestListPage;

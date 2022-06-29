@@ -1,9 +1,6 @@
-import React, { FC, useEffect } from "react";
+import { FC, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
-import queryNames from "../constants/QueryNames";
-import { IQuest } from "shared/interfaces/IQuest";
 import { selectQuests, loadQuests } from "../store/quests/questsSlice";
-import useGQLFetch from "../hooks/useGQLFetch";
 import ErrorBox from "../components/ErrorBox";
 import QuestList from "../components/QuestList";
 

@@ -1,13 +1,17 @@
 import React, { FC } from "react";
-import { IQuest } from "shared/interfaces/IQuest";
+import { IQuest } from "shared";
+import { Grid } from "@mui/material";
+import QuestDetails from "./QuestDetails/QuestDetails";
 
 const QuestList: FC<{ quests: IQuest[] }> = ({ quests }) => {
   return (
-    <div>
+    <Grid container rowSpacing={6} columnSpacing={6} alignItems="stretch">
       {quests.map((quest) => (
-        <div key={quest.id}>{quest.name}</div>
+        <Grid item xs={12} sm={6} md={4} lg={3} key={quest.id}>
+          <QuestDetails quest={quest} />
+        </Grid>
       ))}
-    </div>
+    </Grid>
   );
 };
 

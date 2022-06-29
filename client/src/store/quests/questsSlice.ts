@@ -1,6 +1,6 @@
-import { IQuest } from "shared/interfaces/IQuest";
+import { IQuest } from "shared";
 import { RootState } from "../store";
-import queryNames from "../../constants/QueryNames";
+import queryNames from "../../constants/queryNames";
 import axios from "axios";
 import { apiUrl } from "../../env/env";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";

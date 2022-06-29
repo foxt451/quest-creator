@@ -1,6 +1,6 @@
 import { graphql } from "msw";
 import { quests } from "./mock-data/mock-quests";
-import queryNames from "../constants/QueryNames";
+import queryNames from "../constants/queryNames";
 
 if (!process.env.REACT_APP_API_URL) {
   throw new Error("REACT_APP_API_URL is not set");

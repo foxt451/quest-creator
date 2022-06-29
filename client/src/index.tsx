@@ -13,7 +13,7 @@ const root = createRoot(container);
 function prepare() {
   if (process.env.NODE_ENV === "development") {
     const { worker }: { worker: SetupWorkerApi } = require("./mocks/browser");
-    return worker.start();
+    return worker.start({ onUnhandledRequest: "bypass" });
   }
   return Promise.resolve();
 }

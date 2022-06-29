@@ -1,9 +1,8 @@
-import React, {FC} from 'react'
+import React, { FC } from "react";
+import QuestAddForm from "../components/QuestAddForm";
 
 const AddQuestPage: FC = () => {
-  return (
-    <div>AddQuestPage</div>
-  )
-}
+  return <QuestAddForm />;
+};
 
-export default AddQuestPage
+export default AddQuestPage;

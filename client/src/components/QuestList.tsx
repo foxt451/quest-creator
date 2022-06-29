@@ -1,14 +1,14 @@
 import React, { FC } from "react";
-import { IQuest } from "shared";
+import { EntityId } from "@reduxjs/toolkit";
 import { Grid } from "@mui/material";
-import QuestCard from "./QuestDetails/QuestCard";
+import QuestCard from "./QuestCard/QuestCard";
 
-const QuestList: FC<{ quests: IQuest[] }> = ({ quests }) => {
+const QuestList: FC<{ questIds: EntityId[] }> = ({ questIds }) => {
   return (
     <Grid container rowSpacing={6} columnSpacing={6} alignItems="stretch">
-      {quests.map((quest) => (
-        <Grid item xs={12} sm={6} md={4} lg={3} key={quest.id}>
-          <QuestCard quest={quest} />
+      {questIds.map((questId) => (
+        <Grid item xs={12} sm={6} md={4} lg={3} key={questId}>
+          <QuestCard questId={questId} />
         </Grid>
       ))}
     </Grid>

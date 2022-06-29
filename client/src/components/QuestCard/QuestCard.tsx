@@ -1,10 +1,14 @@
 import React, { FC } from "react";
 import { Paper, Typography, Chip, Box, Divider } from "@mui/material";
-import { IQuest, QuestDifficulty } from "shared";
-import { questDifficulties } from "shared";
+import { QuestDifficulty, questDifficulties } from "shared";
+import { EntityId } from "@reduxjs/toolkit";
+import { useAppSelector } from "../../store/hooks";
+import { selectQuestById } from "../../store/quests/questsSlice";
 import { cutText } from "../../helpers";
 import { FaClock } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 import { defaultImages } from "../../constants/defaultImages";
+import { paths } from "../../constants/paths";
 import styles from "./styles.module.scss";
 
 const getDifficultyColor = (difficulty: QuestDifficulty) => {
@@ -16,11 +20,14 @@ const getDifficultyColor = (difficulty: QuestDifficulty) => {
     case questDifficulties.hard:
       return "error";
   }
+  return "info";
 };
 
 const MAX_VISIBLE_DESCRIPTION_LENGTH = 150;
 
-const QuestCard: FC<{ quest: IQuest }> = ({ quest }) => {
+const QuestCard: FC<{ questId: EntityId }> = ({ questId }) => {
+  const quest = useAppSelector((state) => selectQuestById(state, questId));
+  if (!quest) return null;
   const otherInfoComponent = (
     <>
       {quest.duration && (
@@ -43,9 +50,11 @@ const QuestCard: FC<{ quest: IQuest }> = ({ quest }) => {
           className={styles.questImage}
         />
         <Divider sx={{ margin: "1rem" }}>About</Divider>
-        <Typography variant="h5" component="h2">
-          {quest.name}
-        </Typography>
+        <NavLink to={`${paths.QUESTS}/${questId}`}>
+          <Typography variant="h5" component="h2">
+            {quest.name}
+          </Typography>
+        </NavLink>
         <Typography variant="subtitle1" component="p" marginTop={2}>
           {cutText(quest.description, MAX_VISIBLE_DESCRIPTION_LENGTH)}
         </Typography>

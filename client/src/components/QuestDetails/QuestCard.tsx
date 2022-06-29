@@ -20,7 +20,7 @@ const getDifficultyColor = (difficulty: QuestDifficulty) => {
 
 const MAX_VISIBLE_DESCRIPTION_LENGTH = 150;
 
-const QuestDetails: FC<{ quest: IQuest }> = ({ quest }) => {
+const QuestCard: FC<{ quest: IQuest }> = ({ quest }) => {
   const otherInfoComponent = (
     <>
       {quest.duration && (
@@ -66,4 +66,4 @@ const QuestDetails: FC<{ quest: IQuest }> = ({ quest }) => {
   );
 };
 
-export default QuestDetails;
+export default QuestCard;

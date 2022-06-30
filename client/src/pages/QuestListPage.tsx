@@ -1,6 +1,10 @@
 import { FC, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
 import { loadQuests } from "../store/quests/questsSlice";
+import { Fab } from "@mui/material";
+import { FaPlus } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
+import { paths } from "../constants/paths";
 import ErrorBox from "../components/ErrorBox";
 import QuestList from "../components/QuestList";
 
@@ -24,7 +28,18 @@ const QuestListPage: FC = () => {
     return <ErrorBox message={`Error: ${questsError || "please try again"}`} />;
   }
 
-  return <QuestList questIds={questIds} />;
+  return (
+    <>
+      <div style={{ position: "relative", top: "2rem", right: "1rem" }}>
+        <NavLink to={`${paths.QUESTS}${paths.CREATE}`}>
+          <Fab color="primary" aria-label="create">
+            <FaPlus />
+          </Fab>
+        </NavLink>
+      </div>
+      <QuestList questIds={questIds} />
+    </>
+  );
 };
 
 export default QuestListPage;

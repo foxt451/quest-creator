@@ -29,17 +29,13 @@ const QuestCard: FC<{ questId: EntityId }> = ({ questId }) => {
   const quest = useAppSelector((state) => selectQuestById(state, questId));
   if (!quest) return null;
   const otherInfoComponent = (
-    <>
-      {quest.duration && (
         <>
           <Chip
             icon={<FaClock />}
-            label={`~${quest.duration} min`}
+            label={quest.duration === null ? '>24 h' : `~${quest.duration} min`}
             variant="outlined"
           />
         </>
-      )}
-    </>
   );
   return (
     <Paper elevation={2} sx={{ height: "100%", width: "100%" }}>
@@ -59,12 +55,10 @@ const QuestCard: FC<{ questId: EntityId }> = ({ questId }) => {
           {cutText(quest.description, MAX_VISIBLE_DESCRIPTION_LENGTH)}
         </Typography>
 
-        {otherInfoComponent.props.children && (
           <>
             <Divider sx={{ margin: "1rem" }}>Other Info</Divider>
             <Box>{otherInfoComponent}</Box>
           </>
-        )}
         <Chip
           sx={{ marginTop: "auto", alignSelf: "center" }}
           label={quest.difficulty}

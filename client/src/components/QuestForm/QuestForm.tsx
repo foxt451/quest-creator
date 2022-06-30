@@ -39,7 +39,7 @@ const QuestForm: FC<{
   const handleFormSubmit: SubmitHandler<FormValues> = (data) => {
     const finalData = {
       ...data,
-      duration: durationMore ? null : data.duration,
+      duration: durationMore ? null : (data.duration ?? 0) * 60,
     };
     onSubmit(finalData);
   };

@@ -1,4 +1,5 @@
 import { graphql } from "msw";
+import { IQuest } from "../interfaces/IQuest";
 import { quests } from "./mock-data/mock-quests";
 import queryNames from "../constants/queryNames";
 
@@ -13,6 +14,36 @@ export const handlers = [
     return res(
       ctx.data({
         quests,
+      }),
+      ctx.delay(DELAY_MS)
+    );
+  }),
+  graphql.query(queryNames.QUEST, (req, res, ctx) => {
+    const { id } = req.variables;
+    const quest = quests.find((q) => q.id === id);
+    return res(
+      ctx.data({
+        quest,
+      }),
+      ctx.delay(DELAY_MS)
+    );
+  }),
+  graphql.mutation(queryNames.ADD_QUEST, (req, res, ctx) => {
+    const { name, duration, difficulty, description, image } = req.variables;
+    const newQuest: IQuest = {
+      id: Date.now().toString(),
+      name,
+      duration,
+      difficulty,
+      description,
+      image,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+    quests.push(newQuest);
+    return res(
+      ctx.data({
+        quest: newQuest,
       }),
       ctx.delay(DELAY_MS)
     );

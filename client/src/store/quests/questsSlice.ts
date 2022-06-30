@@ -3,6 +3,7 @@ import { RootState } from "../store";
 import queryNames from "../../constants/queryNames";
 import axios from "axios";
 import { apiUrl } from "../../env/env";
+import { GraphQLRequestBody } from "msw";
 import { FormValues } from "../../components/QuestForm/QuestForm";
 import {
   createSlice,
@@ -32,10 +33,13 @@ const QUESTS_QUERY = `
 export const loadQuests = createAsyncThunk<IQuest[]>(
   "quests/loadQuests",
   async () => {
-    const response = await axios.post(apiUrl, {
-      query: QUESTS_QUERY,
-      variables: {},
-    });
+    const response = await axios.post<any, any, GraphQLRequestBody<{}>>(
+      apiUrl,
+      {
+        query: QUESTS_QUERY,
+        variables: {},
+      }
+    );
     return response.data.data.quests;
   }
 );
@@ -56,7 +60,11 @@ const QUEST_QUERY = `
 export const loadQuest = createAsyncThunk<IQuest, EntityId>(
   "quests/loadQuest",
   async (id: EntityId) => {
-    const response = await axios.post(apiUrl, {
+    const response = await axios.post<
+      any,
+      any,
+      GraphQLRequestBody<{ id: EntityId }>
+    >(apiUrl, {
       query: QUEST_QUERY,
       variables: { id },
     });
@@ -80,10 +88,13 @@ const QUEST_ADD_QUERY = `
 export const addQuest = createAsyncThunk<IQuest, FormValues>(
   "quests/addQuest",
   async (values) => {
-    const response = await axios.post(apiUrl, {
-      query: QUEST_ADD_QUERY,
-      variables: { ...values },
-    });
+    const response = await axios.post<any, any, GraphQLRequestBody<FormValues>>(
+      apiUrl,
+      {
+        query: QUEST_ADD_QUERY,
+        variables: { ...values },
+      }
+    );
     return response.data.data.quest;
   }
 );
@@ -170,6 +181,11 @@ export const questsSlice = createSlice({
       addQuest.fulfilled,
       (state, action: PayloadAction<IQuest>) => {
         questsAdapter.upsertOne(state, action.payload);
+        state.questsPage = {
+          error: null,
+          ids: [],
+          status: "initial",
+        };
       }
     );
   },

@@ -7,8 +7,13 @@ import {
   Slider,
   Typography,
   Switch,
+  FormControl,
+  Select,
   FormControlLabel,
+  InputLabel,
+  MenuItem,
 } from "@mui/material";
+import { questDifficulties } from "shared";
 import styles from "./styles.module.scss";
 
 export type FormValues = Pick<
@@ -16,6 +21,7 @@ export type FormValues = Pick<
   "name" | "duration" | "difficulty" | "description" | "image"
 >;
 
+// TODO: implement image upload
 const QuestForm: FC<{
   initialValues: FormValues;
   onSubmit: SubmitHandler<FormValues>;
@@ -90,6 +96,28 @@ const QuestForm: FC<{
         onChange={onMoreSwitchChange}
         label="> 24 hours"
       />
+      <FormControl sx={{ margin: "2rem" }}>
+        <InputLabel id="difficulty-select-label">Difficulty</InputLabel>
+        <Controller
+          render={({ field: { onChange, value } }) => (
+            <Select
+              value={value}
+              onChange={onChange}
+              sx={{ minWidth: "150px" }}
+              labelId="difficulty-select-label"
+              label="Difficulty"
+            >
+              {Object.values(questDifficulties).map((questDifficulty) => (
+                <MenuItem key={questDifficulty} value={questDifficulty}>
+                  {questDifficulty}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
+          name="difficulty"
+          control={control}
+        />
+      </FormControl>
       <Button type="submit">Submit</Button>
     </form>
   );

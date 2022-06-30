@@ -3,6 +3,7 @@ import { RootState } from "../store";
 import queryNames from "../../constants/queryNames";
 import axios from "axios";
 import { apiUrl } from "../../env/env";
+import { FormValues } from "../../components/QuestForm/QuestForm";
 import {
   createSlice,
   createAsyncThunk,
@@ -10,6 +11,10 @@ import {
   PayloadAction,
   EntityId,
 } from "@reduxjs/toolkit";
+
+const questsAdapter = createEntityAdapter<IQuest>({
+  sortComparer: (a, b) => a.createdAt - b.createdAt,
+});
 
 const QUESTS_QUERY = `
   query ${queryNames.QUESTS} {
@@ -23,10 +28,6 @@ const QUESTS_QUERY = `
     }
   }
 `;
-
-const questsAdapter = createEntityAdapter<IQuest>({
-  sortComparer: (a, b) => a.createdAt - b.createdAt,
-});
 
 export const loadQuests = createAsyncThunk<IQuest[]>(
   "quests/loadQuests",
@@ -58,6 +59,30 @@ export const loadQuest = createAsyncThunk<IQuest, EntityId>(
     const response = await axios.post(apiUrl, {
       query: QUEST_QUERY,
       variables: { id },
+    });
+    return response.data.data.quest;
+  }
+);
+
+const QUEST_ADD_QUERY = `
+  mutation ${queryNames.ADD_QUEST} ($name: String!, $duration: Int, $difficulty: QuestDifficulty!, $description: String!, $image: String) {
+    quest(id: $id) {
+      id,
+      name,
+      description,
+      image,
+      difficulty,
+      duration
+    }
+  }
+`;
+
+export const addQuest = createAsyncThunk<IQuest, FormValues>(
+  "quests/addQuest",
+  async (values) => {
+    const response = await axios.post(apiUrl, {
+      query: QUEST_ADD_QUERY,
+      variables: { ...values },
     });
     return response.data.data.quest;
   }
@@ -102,7 +127,7 @@ export const questsSlice = createSlice({
       if (state.ids.includes(action.payload)) {
         state.selectedQuest.status = "loaded";
         state.selectedQuest.error = null;
-        
+
         return;
       }
       state.selectedQuest.error = null;
@@ -140,6 +165,13 @@ export const questsSlice = createSlice({
       state.selectedQuest.error = action.error.message ?? null;
       state.selectedQuest.status = "failed";
     });
+
+    builder.addCase(
+      addQuest.fulfilled,
+      (state, action: PayloadAction<IQuest>) => {
+        questsAdapter.upsertOne(state, action.payload);
+      }
+    );
   },
 });
 

@@ -5,12 +5,14 @@ import AddQuestPage from "./pages/AddQuestPage";
 import UpdateQuestPage from "./pages/UpdateQuestPage";
 import { Container } from "@mui/material";
 import { paths, pathParameters } from "./constants/paths";
+import NavBar from "./components/NavBar/NavBar";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import "./App.css";
 
 function App() {
   return (
     <BrowserRouter>
+      <NavBar />
       <Container sx={{ padding: "2rem" }}>
         <Routes>
           <Route path="/" element={<Navigate to={paths.QUESTS} />} />

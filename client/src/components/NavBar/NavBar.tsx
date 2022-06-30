@@ -13,10 +13,14 @@ import {
   ListItemButton,
   ListItemText,
 } from "@mui/material";
+import { paths } from "../../constants/paths";
 import { FaBars } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 
 const drawerWidth = 240;
-const navItems = ["Home", "About", "Contact"];
+const navItems = {
+  quests: ["Quests", paths.QUESTS],
+};
 
 const NavBar: FC = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -32,11 +36,13 @@ const NavBar: FC = () => {
       </Typography>
       <Divider />
       <List>
-        {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText primary={item} />
-            </ListItemButton>
+        {Object.values(navItems).map(([name, link]) => (
+          <ListItem key={name} disablePadding>
+            <NavLink to={link}>
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <ListItemText primary={name} />
+              </ListItemButton>
+            </NavLink>
           </ListItem>
         ))}
       </List>
@@ -65,10 +71,10 @@ const NavBar: FC = () => {
             MUI
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            {navItems.map((item) => (
-              <Button key={item} sx={{ color: "#fff" }}>
-                {item}
-              </Button>
+            {Object.values(navItems).map(([name, link]) => (
+              <NavLink key={name} to={link}>
+                <Button sx={{ color: "#fff" }}>{name}</Button>
+              </NavLink>
             ))}
           </Box>
         </Toolbar>

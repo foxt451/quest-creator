@@ -1,8 +1,11 @@
 import React, { FC } from "react";
 import { EntityId } from "@reduxjs/toolkit";
+import { NavLink } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
+import { FaEdit } from "react-icons/fa";
+import { paths } from "../../constants/paths";
 import { selectQuestById } from "../../store/quests/questsSlice";
-import { Box, Typography, Divider } from "@mui/material";
+import { Box, Typography, Divider, Fab } from "@mui/material";
 
 import styles from "./styles.module.scss";
 
@@ -22,6 +25,11 @@ const QuestDetails: FC<{ questId: EntityId }> = ({ questId }) => {
       <Typography variant="subtitle1" component="p">
         {quest.description}
       </Typography>
+      <NavLink to={`${paths.QUESTS}/${questId}${paths.UPDATE}`}>
+        <Fab color="primary" aria-label="create">
+          <FaEdit />
+        </Fab>
+      </NavLink>
     </Box>
   );
 };

@@ -2,6 +2,7 @@ import React from "react";
 import QuestListPage from "./pages/QuestListPage";
 import QuestDetailsPage from "./pages/QuestDetailsPage";
 import AddQuestPage from "./pages/AddQuestPage";
+import UpdateQuestPage from "./pages/UpdateQuestPage";
 import { Container } from "@mui/material";
 import { paths, pathParameters } from "./constants/paths";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
@@ -17,6 +18,10 @@ function App() {
           <Route
             path={`${paths.QUESTS}/:${pathParameters.QUEST_ID}`}
             element={<QuestDetailsPage />}
+          />
+          <Route
+            path={`${paths.QUESTS}/:${pathParameters.QUEST_ID}${paths.UPDATE}`}
+            element={<UpdateQuestPage />}
           />
           <Route
             path={`${paths.QUESTS}${paths.CREATE}`}

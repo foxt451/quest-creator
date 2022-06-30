@@ -1,7 +1,7 @@
 import { graphql } from "msw";
 import { IQuest } from "../interfaces/IQuest";
 import { quests } from "./mock-data/mock-quests";
-import queryNames from "../constants/queryNames";
+import { queryNames } from "../constants/graphql";
 
 if (!process.env.REACT_APP_API_URL) {
   throw new Error("REACT_APP_API_URL is not set");
@@ -18,18 +18,35 @@ export const handlers = [
       ctx.delay(DELAY_MS)
     );
   }),
-  graphql.query(queryNames.QUEST, (req, res, ctx) => {
-    const { id } = req.variables;
-    const quest = quests.find((q) => q.id === id);
-    return res(
-      ctx.data({
-        quest,
-      }),
-      ctx.delay(DELAY_MS)
-    );
-  }),
+  graphql.query(
+    queryNames.QUEST,
+    (req, res, ctx) => {
+      const { id } = req.variables;
+      const quest = quests.find((q) => q.id === id);
+      if (!quest) {
+        return res(
+          ctx.status(404),
+          ctx.errors([
+            {
+              message: "Not found",
+              errorType: "NotFoundError",
+            },
+          ]),
+          ctx.delay(DELAY_MS)
+        );
+      }
+      return res(
+        ctx.data({
+          quest,
+        }),
+        ctx.delay(DELAY_MS)
+      );
+    }
+  ),
   graphql.mutation(queryNames.ADD_QUEST, (req, res, ctx) => {
-    const { name, duration, difficulty, description, image } = req.variables;
+    const {
+      data: { name, duration, difficulty, description, image },
+    } = req.variables;
     const newQuest: IQuest = {
       id: Date.now().toString(),
       name,
@@ -41,6 +58,43 @@ export const handlers = [
       updatedAt: Date.now(),
     };
     quests.push(newQuest);
+    return res(
+      ctx.data({
+        quest: newQuest,
+      }),
+      ctx.delay(DELAY_MS)
+    );
+  }),
+  graphql.mutation(queryNames.UPDATE_QUEST, (req, res, ctx) => {
+    const {
+      id,
+      data: { name, duration, difficulty, description, image },
+    } = req.variables;
+    const oldQuestIndex = quests.findIndex((q) => q.id === id);
+    const oldQuest = quests[oldQuestIndex];
+    if (!oldQuest) {
+      return res(
+        ctx.status(404),
+        ctx.errors([
+          {
+            message: "Not found",
+            errorType: "NotFoundError",
+          },
+        ]),
+        ctx.delay(DELAY_MS)
+      );
+    }
+    const newQuest: IQuest = {
+      ...oldQuest,
+      name,
+      duration,
+      difficulty,
+      description,
+      image,
+      updatedAt: Date.now(),
+    };
+    
+    quests[oldQuestIndex] = newQuest;
     return res(
       ctx.data({
         quest: newQuest,

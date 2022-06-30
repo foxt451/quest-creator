@@ -61,7 +61,8 @@ const QuestForm: FC<{
       />
       <TextField
         multiline
-        minRows={3}
+        fullWidth
+        rows={7}
         label="Description"
         error={Boolean(errors.description)}
         helperText={errors.description?.message}

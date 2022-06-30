@@ -1,6 +1,6 @@
 import { IQuest } from "../../interfaces/IQuest";
 import { RootState } from "../store";
-import queryNames from "../../constants/queryNames";
+import { queryNames, inputTypeNames } from "../../constants/graphql";
 import axios from "axios";
 import { apiUrl } from "../../env/env";
 import { GraphQLRequestBody } from "msw";
@@ -72,9 +72,19 @@ export const loadQuest = createAsyncThunk<IQuest, EntityId>(
   }
 );
 
+// const QUEST_DATA_INPUT_TYPE = `
+// input QuestData {
+//     name: String!,
+//     duration: Int,
+//     difficulty: QuestDifficulty!,
+//     description: String!,
+//     image: String
+// }
+// `;
+
 const QUEST_ADD_QUERY = `
-  mutation ${queryNames.ADD_QUEST} ($name: String!, $duration: Int, $difficulty: QuestDifficulty!, $description: String!, $image: String) {
-    quest(id: $id) {
+  mutation ${queryNames.ADD_QUEST} ($data: ${inputTypeNames.QUEST_DATA}!) {
+    addQuest(data: $data) {
       id,
       name,
       description,
@@ -92,12 +102,40 @@ export const addQuest = createAsyncThunk<IQuest, FormValues>(
       apiUrl,
       {
         query: QUEST_ADD_QUERY,
-        variables: { ...values },
+        variables: { data: values },
       }
     );
     return response.data.data.quest;
   }
 );
+
+const QUEST_UPDATE_QUERY = `
+  mutation ${queryNames.UPDATE_QUEST} ($id: ID!, $data: ${inputTypeNames.QUEST_DATA}!) {
+    updateQuest(id: $id, data: $data) {
+      id,
+      name,
+      description,
+      image,
+      difficulty,
+      duration
+    }
+  }
+`;
+
+export const updateQuest = createAsyncThunk<
+  IQuest,
+  { id: EntityId; data: FormValues }
+>("quests/updateQuest", async ({ id, data }) => {
+  const response = await axios.post<
+    any,
+    any,
+    GraphQLRequestBody<{ id: EntityId; data: FormValues }>
+  >(apiUrl, {
+    query: QUEST_UPDATE_QUERY,
+    variables: { id, data },
+  });
+  return response.data.data.quest;
+});
 
 type LoadingStatus = "initial" | "loading" | "failed" | "loaded";
 
@@ -186,6 +224,13 @@ export const questsSlice = createSlice({
           ids: [],
           status: "initial",
         };
+      }
+    );
+
+    builder.addCase(
+      updateQuest.fulfilled,
+      (state, action: PayloadAction<IQuest>) => {
+        questsAdapter.upsertOne(state, action.payload);
       }
     );
   },

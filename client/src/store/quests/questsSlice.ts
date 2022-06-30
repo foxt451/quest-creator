@@ -137,6 +137,25 @@ export const updateQuest = createAsyncThunk<
   return response.data.data.quest;
 });
 
+const QUEST_DELETE_QUERY = `
+  mutation ${queryNames.DELETE_QUEST} ($id: ID!) {
+    deleteQuest(id: $id) {
+      id
+    }
+  }
+`;
+
+export const deleteQuest = createAsyncThunk<EntityId, EntityId>(
+  "quests/deleteQuest",
+  async (id) => {
+    await axios.post<any, any, GraphQLRequestBody<{ id: EntityId }>>(apiUrl, {
+      query: QUEST_DELETE_QUERY,
+      variables: { id },
+    });
+    return id;
+  }
+);
+
 type LoadingStatus = "initial" | "loading" | "failed" | "loaded";
 
 export interface QuestsAdditionalState {
@@ -231,6 +250,17 @@ export const questsSlice = createSlice({
       updateQuest.fulfilled,
       (state, action: PayloadAction<IQuest>) => {
         questsAdapter.upsertOne(state, action.payload);
+      }
+    );
+
+    builder.addCase(
+      deleteQuest.fulfilled,
+      (state, action: PayloadAction<EntityId>) => {
+        questsAdapter.removeOne(state, action.payload);
+        state.questsPage.ids = state.questsPage.ids.filter(
+          (id) => id !== action.payload
+        );
+        state.selectedQuest.id = null;
       }
     );
   },

@@ -18,31 +18,28 @@ export const handlers = [
       ctx.delay(DELAY_MS)
     );
   }),
-  graphql.query(
-    queryNames.QUEST,
-    (req, res, ctx) => {
-      const { id } = req.variables;
-      const quest = quests.find((q) => q.id === id);
-      if (!quest) {
-        return res(
-          ctx.status(404),
-          ctx.errors([
-            {
-              message: "Not found",
-              errorType: "NotFoundError",
-            },
-          ]),
-          ctx.delay(DELAY_MS)
-        );
-      }
+  graphql.query(queryNames.QUEST, (req, res, ctx) => {
+    const { id } = req.variables;
+    const quest = quests.find((q) => q.id === id);
+    if (!quest) {
       return res(
-        ctx.data({
-          quest,
-        }),
+        ctx.status(404),
+        ctx.errors([
+          {
+            message: "Not found",
+            errorType: "NotFoundError",
+          },
+        ]),
         ctx.delay(DELAY_MS)
       );
     }
-  ),
+    return res(
+      ctx.data({
+        quest,
+      }),
+      ctx.delay(DELAY_MS)
+    );
+  }),
   graphql.mutation(queryNames.ADD_QUEST, (req, res, ctx) => {
     const {
       data: { name, duration, difficulty, description, image },
@@ -93,11 +90,22 @@ export const handlers = [
       image,
       updatedAt: Date.now(),
     };
-    
+
     quests[oldQuestIndex] = newQuest;
     return res(
       ctx.data({
         quest: newQuest,
+      }),
+      ctx.delay(DELAY_MS)
+    );
+  }),
+  graphql.mutation(queryNames.DELETE_QUEST, (req, res, ctx) => {
+    const { id } = req.variables;
+    const index = quests.findIndex((q) => q.id === id);
+    quests.splice(index, 1);
+    return res(
+      ctx.data({
+        id,
       }),
       ctx.delay(DELAY_MS)
     );

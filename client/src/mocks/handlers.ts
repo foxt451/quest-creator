@@ -50,6 +50,7 @@ export const handlers = [
       name,
       duration,
       difficulty,
+      userId: "1",
       description,
       image,
       createdAt: Date.now(),

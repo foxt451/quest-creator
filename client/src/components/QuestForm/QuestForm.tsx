@@ -14,7 +14,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { questDifficulties } from "shared";
-import styles from "./styles.module.scss";
+import styles from "../common-styles.module.scss";
 
 export type FormValues = Pick<
   IQuest,

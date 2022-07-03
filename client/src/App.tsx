@@ -6,6 +6,7 @@ import {
   UpdateQuestPage,
   NotFoundPage,
   LoginPage,
+  SignupPage
 } from "./pages";
 import { Container } from "@mui/material";
 import { paths, pathParameters } from "./constants/paths";
@@ -34,6 +35,7 @@ function App() {
             element={<AddQuestPage />}
           />
           <Route path={paths.LOGIN} element={<LoginPage />} />
+          <Route path={paths.SIGN_UP} element={<SignupPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Container>

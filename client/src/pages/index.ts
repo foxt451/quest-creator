@@ -4,6 +4,7 @@ import QuestDetailsPage from "./QuestDetailsPage";
 import QuestListPage from "./QuestListPage";
 import UpdateQuestPage from "./UpdateQuestPage";
 import LoginPage from "./LoginPage";
+import SignupPage from "./SignupPage";
 
 export {
   NotFoundPage,
@@ -12,4 +13,5 @@ export {
   QuestListPage,
   UpdateQuestPage,
   LoginPage,
+  SignupPage,
 };

@@ -1,11 +1,12 @@
 import { BaseModel } from "./BaseModel";
 import { IUser } from "../../interfaces/IUser";
+import { tableNames } from "../constants";
 
 export interface UserModel extends IUser {}
 
 export class UserModel extends BaseModel {
   static get tableName() {
-    return "users";
+    return tableNames.USERS;
   }
 
   static get jsonSchema() {

@@ -1,6 +1,8 @@
 import { ENV } from "./env";
+import { Knex } from "knex";
+import { knexSnakeCaseMappers } from "objection";
 
-const knexConfig = {
+const knexConfig: Knex.Config = {
   client: ENV.DB_CLIENT,
   connection: {
     user: ENV.DB_USER,
@@ -10,13 +12,15 @@ const knexConfig = {
     password: ENV.DB_PASSWORD,
   },
   migrations: {
-    directory: "./src/data/migrations",
+    extension: "ts",
+    directory: "./data/migrations",
     tableName: "knex_migrations",
   },
   seeds: {
-    directory: "./src/data/seeds",
+    directory: "./data/seeds",
   },
   debug: ENV.DEBUG,
+  ...knexSnakeCaseMappers,
 };
 
 export default knexConfig;

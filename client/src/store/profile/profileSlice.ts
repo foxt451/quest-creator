@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk, isAnyOf } from "@reduxjs/toolkit";
 import { IUserInfo } from "../../interfaces/IUserInfo";
-import { IUserInfo as IUserCommonInfo } from "shared";
+import { IRegisterUser, ILoginUser } from "shared";
 import { RootState } from "../store";
-import { FormValues as LoginValues } from "../../components/LoginForm";
 import { queryNames, inputTypeNames } from "../../constants/graphql";
 import { GraphQLJsonRequestBody } from "msw";
 import axios from "axios";
@@ -31,13 +30,13 @@ const LOGIN_QUERY = `
   }
 `;
 
-export const login = createAsyncThunk<ProfileState, LoginValues>(
+export const login = createAsyncThunk<ProfileState, ILoginUser>(
   "profile/login",
   async (loginData) => {
     const response = await axios.post<
       any,
       any,
-      GraphQLJsonRequestBody<LoginValues>
+      GraphQLJsonRequestBody<ILoginUser>
     >(apiUrl, {
       query: LOGIN_QUERY,
       variables: { ...loginData },
@@ -45,10 +44,6 @@ export const login = createAsyncThunk<ProfileState, LoginValues>(
     return response.data.data;
   }
 );
-
-interface RegisterValues extends IUserCommonInfo {
-  password: string;
-}
 
 const REGISTER_QUERY = `
   mutation ${queryNames.REGISTER_PROFILE} ($username: String!, $email: String!, $password: String!) {
@@ -63,13 +58,13 @@ const REGISTER_QUERY = `
   }
 `;
 
-export const register = createAsyncThunk<ProfileState, RegisterValues>(
+export const register = createAsyncThunk<ProfileState, IRegisterUser>(
   "profile/register",
   async (registerData) => {
     const response = await axios.post<
       any,
       any,
-      GraphQLJsonRequestBody<RegisterValues>
+      GraphQLJsonRequestBody<IRegisterUser>
     >(apiUrl, {
       query: REGISTER_QUERY,
       variables: { ...registerData },

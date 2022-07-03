@@ -5,13 +5,11 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../store/hooks";
 import { register as registerAction } from "../store/profile/profileSlice";
 import { TextField, Button } from "@mui/material";
+import { IRegisterUser } from "shared";
 
 import styles from "./common-styles.module.scss";
 
-interface FormValues {
-  username: string;
-  email: string;
-  password: string;
+interface FormValues extends IRegisterUser {
   repeatPassword: string;
 }
 

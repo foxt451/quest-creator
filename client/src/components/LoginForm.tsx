@@ -6,13 +6,9 @@ import { TextField, Button } from "@mui/material";
 import { useAppDispatch } from "../store/hooks";
 import { login } from "../store/profile/profileSlice";
 import styles from "./common-styles.module.scss";
+import { ILoginUser } from "shared";
 
-export interface FormValues {
-  email: string;
-  password: string;
-}
-
-const defaultData: FormValues = {
+const defaultData: ILoginUser = {
   email: "",
   password: "",
 };
@@ -24,10 +20,10 @@ const LoginForm: FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const { register, handleSubmit } = useForm<FormValues>({
+  const { register, handleSubmit } = useForm<ILoginUser>({
     defaultValues: defaultData,
   });
-  const handleFormSubmit = async (data: FormValues) => {
+  const handleFormSubmit = async (data: ILoginUser) => {
     setLoading(true);
     try {
       await dispatch(login(data)).unwrap();

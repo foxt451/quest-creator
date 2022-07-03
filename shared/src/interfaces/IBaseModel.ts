@@ -1,4 +1,4 @@
 export interface IBaseModel {
-  createdAt: number;
-  updatedAt: number;
+  createdAt: string;
+  updatedAt: string;
 }

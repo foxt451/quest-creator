@@ -20,7 +20,7 @@ const knexConfig: Knex.Config = {
     directory: "./data/seeds",
   },
   debug: ENV.DEBUG,
-  ...knexSnakeCaseMappers,
+  ...knexSnakeCaseMappers(),
 };
 
 export default knexConfig;

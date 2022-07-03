@@ -16,12 +16,12 @@ export class BaseModel extends Model {
   }
 
   $beforeInsert() {
-    const date = Date.now();
+    const date = new Date().toISOString();
     this.createdAt = date;
     this.updatedAt = date;
   }
 
   $beforeUpdate() {
-    this.updatedAt = Date.now();
+    this.updatedAt = new Date().toISOString();
   }
 }

@@ -14,8 +14,14 @@ export async function up(knex: Knex): Promise<void> {
       .unique();
     table.string(columnNames.users.email).unique().notNullable();
     table.string(columnNames.users.password).notNullable();
-    table.integer(columnNames.base.createdAt).notNullable();
-    table.integer(columnNames.base.updatedAt).notNullable();
+    table
+      .timestamp(columnNames.base.createdAt, { useTz: true })
+      .notNullable()
+      .defaultTo(knex.fn.now());
+    table
+      .timestamp(columnNames.base.updatedAt, { useTz: true })
+      .notNullable()
+      .defaultTo(knex.fn.now());
   });
 }
 

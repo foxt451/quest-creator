@@ -1,8 +1,12 @@
 import React from "react";
-import QuestListPage from "./pages/QuestListPage";
-import QuestDetailsPage from "./pages/QuestDetailsPage";
-import AddQuestPage from "./pages/AddQuestPage";
-import UpdateQuestPage from "./pages/UpdateQuestPage";
+import {
+  QuestListPage,
+  QuestDetailsPage,
+  AddQuestPage,
+  UpdateQuestPage,
+  NotFoundPage,
+  LoginPage,
+} from "./pages";
 import { Container } from "@mui/material";
 import { paths, pathParameters } from "./constants/paths";
 import NavBar from "./components/NavBar/NavBar";
@@ -29,6 +33,8 @@ function App() {
             path={`${paths.QUESTS}${paths.CREATE}`}
             element={<AddQuestPage />}
           />
+          <Route path={paths.LOGIN} element={<LoginPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Container>
     </BrowserRouter>

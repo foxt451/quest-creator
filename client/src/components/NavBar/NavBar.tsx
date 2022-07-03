@@ -20,6 +20,8 @@ import { NavLink } from "react-router-dom";
 const drawerWidth = 240;
 const navItems = {
   quests: ["Quests", paths.QUESTS],
+  login: ["Login", paths.LOGIN],
+  signup: ["Sign Up", paths.SIGN_UP],
 };
 
 const NavBar: FC = () => {
@@ -32,7 +34,7 @@ const NavBar: FC = () => {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
+        Quest Room
       </Typography>
       <Divider />
       <List>
@@ -68,7 +70,7 @@ const NavBar: FC = () => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            MUI
+            Quest Room
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {Object.values(navItems).map(([name, link]) => (

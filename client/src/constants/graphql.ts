@@ -6,6 +6,7 @@ const queryNames = {
   DELETE_QUEST: "DeleteQuest",
 
   LOGIN_PROFILE: "LoginProfile",
+  REGISTER_PROFILE: "RegisterProfile",
 } as const;
 
 const inputTypeNames = {

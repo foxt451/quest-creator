@@ -16,8 +16,8 @@ import {
 import { paths } from "../../constants/paths";
 import { FaBars } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import { selectUser } from "../../store/profile/profileSlice";
-import { useAppSelector } from "../../store/hooks";
+import { selectUser, logout } from "../../store/profile/profileSlice";
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
 const drawerWidth = 240;
 type NavItem = [string, string];
@@ -26,7 +26,13 @@ const baseNavItems: Record<string, NavItem> = {
 };
 
 const NavBar: FC = () => {
+  const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
+
+  const onLogout = () => {
+    dispatch(logout());
+  };
+
   let navItems = { ...baseNavItems };
   if (!user) {
     navItems = {
@@ -58,6 +64,13 @@ const NavBar: FC = () => {
             </NavLink>
           </ListItem>
         ))}
+        {user && (
+          <ListItem disablePadding>
+            <ListItemButton sx={{ textAlign: "center" }} onClick={onLogout}>
+              <ListItemText primary={"Logout"} />
+            </ListItemButton>
+          </ListItem>
+        )}
       </List>
     </Box>
   );
@@ -89,7 +102,17 @@ const NavBar: FC = () => {
                 <Button sx={{ color: "#fff" }}>{name}</Button>
               </NavLink>
             ))}
+            {user && (
+              <Button sx={{ color: "#fff" }} onClick={onLogout}>
+                Logout
+              </Button>
+            )}
           </Box>
+          {user && (
+            <Typography variant="h6" component="div">
+              Hi, {user.username}
+            </Typography>
+          )}
         </Toolbar>
       </AppBar>
       <Box component="nav">

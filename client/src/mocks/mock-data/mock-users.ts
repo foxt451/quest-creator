@@ -1,6 +1,6 @@
 import { IUserInfo } from "../../interfaces/IUserInfo";
 
-interface MockUser extends IUserInfo {
+export interface MockUser extends IUserInfo {
   password: string;
 }
 
@@ -31,4 +31,13 @@ export const sanitizeUser = (user: MockUser): IUserInfo => {
     username: user.username,
     email: user.email,
   };
+};
+
+export const registerUser = (user: Omit<MockUser, "id">): IUserInfo => {
+  const newUser: MockUser = {
+    ...user,
+    id: `${users.length + 1}`,
+  };
+  users.push(newUser);
+  return sanitizeUser(newUser);
 };

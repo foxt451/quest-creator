@@ -1,5 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, isAnyOf } from "@reduxjs/toolkit";
 import { IUserInfo } from "../../interfaces/IUserInfo";
+import { IUserInfo as IUserCommonInfo } from "shared";
 import { RootState } from "../store";
 import { FormValues as LoginValues } from "../../components/LoginForm";
 import { queryNames, inputTypeNames } from "../../constants/graphql";
@@ -45,19 +46,59 @@ export const login = createAsyncThunk<ProfileState, LoginValues>(
   }
 );
 
+interface RegisterValues extends IUserCommonInfo {
+  password: string;
+}
+
+const REGISTER_QUERY = `
+  mutation ${queryNames.REGISTER_PROFILE} ($username: String!, $email: String!, $password: String!) {
+    register(username: $username, email: $email, password: $password) {
+      jwt,
+      user {
+        id,
+        username,
+        email
+      }
+    }
+  }
+`;
+
+export const register = createAsyncThunk<ProfileState, RegisterValues>(
+  "profile/register",
+  async (registerData) => {
+    const response = await axios.post<
+      any,
+      any,
+      GraphQLJsonRequestBody<RegisterValues>
+    >(apiUrl, {
+      query: REGISTER_QUERY,
+      variables: { ...registerData },
+    });
+    return response.data.data;
+  }
+);
+
 export const profileSlice = createSlice({
   name: "profile",
   initialState,
-  reducers: {},
+  reducers: {
+    logout(state) {
+      state.jwt = null;
+      state.user = null;
+    },
+  },
   extraReducers(builder) {
-    builder.addCase(login.fulfilled, (state, action) => {
-      state.jwt = action.payload.jwt;
-      state.user = action.payload.user;
-    });
+    builder.addMatcher(
+      isAnyOf(login.fulfilled, register.fulfilled),
+      (state, action) => {
+        state.jwt = action.payload.jwt;
+        state.user = action.payload.user;
+      }
+    );
   },
 });
 
 // selector for selecting user
 export const selectUser = (state: RootState) => state.profile.user;
-
+export const { logout } = profileSlice.actions;
 export default profileSlice.reducer;

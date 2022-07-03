@@ -1,7 +1,7 @@
 import { graphql } from "msw";
 import { IQuest } from "../interfaces/IQuest";
 import { quests } from "./mock-data/mock-quests";
-import { users, sanitizeUser } from "./mock-data/mock-users";
+import { users, sanitizeUser, registerUser } from "./mock-data/mock-users";
 import { queryNames } from "../constants/graphql";
 
 if (!process.env.REACT_APP_API_URL) {
@@ -133,6 +133,31 @@ export const handlers = [
       ctx.data({
         jwt: `${email}`,
         user: sanitizeUser(user),
+      }),
+      ctx.delay(DELAY_MS)
+    );
+  }),
+
+  graphql.mutation(queryNames.REGISTER_PROFILE, (req, res, ctx) => {
+    const { username, email, password } = req.variables;
+    const user = users.find((u) => u.email === email);
+    if (user) {
+      return res(
+        ctx.status(400),
+        ctx.errors([
+          {
+            message: "User already exists",
+            errorType: "BadRequestError",
+          },
+        ]),
+        ctx.delay(DELAY_MS)
+      );
+    }
+    const newUser = registerUser({ username, email, password });
+    return res(
+      ctx.data({
+        jwt: `${email}`,
+        user: newUser,
       }),
       ctx.delay(DELAY_MS)
     );

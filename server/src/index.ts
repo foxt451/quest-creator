@@ -1,15 +1,20 @@
 import express, { Request, Response } from "express";
-import dotenv from "dotenv";
+import knex from "knex";
+import knexConfig from "./knexfile";
+import { ENV } from "./env";
+import { Model } from "objection";
 
-dotenv.config();
+const knexInstance = knex(knexConfig);
+Model.knex(knexInstance);
 
 const app = express();
-const port = process.env.PORT;
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
 });
 
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
+app.listen(ENV.PORT, () => {
+  console.log(
+    `⚡️[server]: Server is running at https://localhost:${ENV.PORT}`
+  );
 });

@@ -4,6 +4,8 @@ const queryNames = {
   ADD_QUEST: "AddQuest",
   UPDATE_QUEST: "UpdateQuest",
   DELETE_QUEST: "DeleteQuest",
+
+  LOGIN_PROFILE: "LoginProfile",
 } as const;
 
 const inputTypeNames = {

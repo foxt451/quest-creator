@@ -3,7 +3,7 @@ import { RootState } from "../store";
 import { queryNames, inputTypeNames } from "../../constants/graphql";
 import axios from "axios";
 import { apiUrl } from "../../env/env";
-import { GraphQLRequestBody } from "msw";
+import { GraphQLJsonRequestBody } from "msw";
 import { FormValues } from "../../components/QuestForm/QuestForm";
 import {
   createSlice,
@@ -33,7 +33,7 @@ const QUESTS_QUERY = `
 export const loadQuests = createAsyncThunk<IQuest[]>(
   "quests/loadQuests",
   async () => {
-    const response = await axios.post<any, any, GraphQLRequestBody<{}>>(
+    const response = await axios.post<any, any, GraphQLJsonRequestBody<{}>>(
       apiUrl,
       {
         query: QUESTS_QUERY,
@@ -63,7 +63,7 @@ export const loadQuest = createAsyncThunk<IQuest, EntityId>(
     const response = await axios.post<
       any,
       any,
-      GraphQLRequestBody<{ id: EntityId }>
+      GraphQLJsonRequestBody<{ id: EntityId }>
     >(apiUrl, {
       query: QUEST_QUERY,
       variables: { id },
@@ -98,13 +98,14 @@ const QUEST_ADD_QUERY = `
 export const addQuest = createAsyncThunk<IQuest, FormValues>(
   "quests/addQuest",
   async (values) => {
-    const response = await axios.post<any, any, GraphQLRequestBody<FormValues>>(
-      apiUrl,
-      {
-        query: QUEST_ADD_QUERY,
-        variables: { data: values },
-      }
-    );
+    const response = await axios.post<
+      any,
+      any,
+      GraphQLJsonRequestBody<{ data: FormValues }>
+    >(apiUrl, {
+      query: QUEST_ADD_QUERY,
+      variables: { data: values },
+    });
     return response.data.data.quest;
   }
 );
@@ -129,7 +130,7 @@ export const updateQuest = createAsyncThunk<
   const response = await axios.post<
     any,
     any,
-    GraphQLRequestBody<{ id: EntityId; data: FormValues }>
+    GraphQLJsonRequestBody<{ id: EntityId; data: FormValues }>
   >(apiUrl, {
     query: QUEST_UPDATE_QUERY,
     variables: { id, data },
@@ -148,10 +149,13 @@ const QUEST_DELETE_QUERY = `
 export const deleteQuest = createAsyncThunk<EntityId, EntityId>(
   "quests/deleteQuest",
   async (id) => {
-    await axios.post<any, any, GraphQLRequestBody<{ id: EntityId }>>(apiUrl, {
-      query: QUEST_DELETE_QUERY,
-      variables: { id },
-    });
+    await axios.post<any, any, GraphQLJsonRequestBody<{ id: EntityId }>>(
+      apiUrl,
+      {
+        query: QUEST_DELETE_QUERY,
+        variables: { id },
+      }
+    );
     return id;
   }
 );

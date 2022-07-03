@@ -1,9 +1,11 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import questsReducer from './quests/questsSlice';
+import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import questsReducer from "./quests/questsSlice";
+import profileReducer from "./profile/profileSlice";
 
 export const store = configureStore({
   reducer: {
     quests: questsReducer,
+    profile: profileReducer,
   },
 });
 

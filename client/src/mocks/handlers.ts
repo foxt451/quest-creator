@@ -1,6 +1,7 @@
 import { graphql } from "msw";
 import { IQuest } from "../interfaces/IQuest";
 import { quests } from "./mock-data/mock-quests";
+import { users, sanitizeUser } from "./mock-data/mock-users";
 import { queryNames } from "../constants/graphql";
 
 if (!process.env.REACT_APP_API_URL) {
@@ -106,6 +107,32 @@ export const handlers = [
     return res(
       ctx.data({
         id,
+      }),
+      ctx.delay(DELAY_MS)
+    );
+  }),
+
+  graphql.mutation(queryNames.LOGIN_PROFILE, (req, res, ctx) => {
+    const { email, password } = req.variables;
+    const user = users.find(
+      (u) => u.email === email && u.password === password
+    );
+    if (!user) {
+      return res(
+        ctx.status(404),
+        ctx.errors([
+          {
+            message: "Not found",
+            errorType: "NotFoundError",
+          },
+        ]),
+        ctx.delay(DELAY_MS)
+      );
+    }
+    return res(
+      ctx.data({
+        jwt: `${email}`,
+        user: sanitizeUser(user),
       }),
       ctx.delay(DELAY_MS)
     );

@@ -16,15 +16,26 @@ import {
 import { paths } from "../../constants/paths";
 import { FaBars } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import { selectUser } from "../../store/profile/profileSlice";
+import { useAppSelector } from "../../store/hooks";
 
 const drawerWidth = 240;
-const navItems = {
+type NavItem = [string, string];
+const baseNavItems: Record<string, NavItem> = {
   quests: ["Quests", paths.QUESTS],
-  login: ["Login", paths.LOGIN],
-  signup: ["Sign Up", paths.SIGN_UP],
 };
 
 const NavBar: FC = () => {
+  const user = useAppSelector(selectUser);
+  let navItems = { ...baseNavItems };
+  if (!user) {
+    navItems = {
+      ...navItems,
+      login: ["Login", paths.LOGIN],
+      signup: ["Sign Up", paths.SIGN_UP],
+    };
+  }
+
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {

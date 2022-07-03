@@ -1,10 +1,14 @@
 import { BaseModel } from "./BaseModel";
 import { IUser } from "../../interfaces/IUser";
-import { tableNames } from "../constants";
+import { tableNames, userColumns } from "../constants";
 
 export interface UserModel extends IUser {}
 
 export class UserModel extends BaseModel {
+  static get idColumn() {
+    return userColumns.id;
+  }
+
   static get tableName() {
     return tableNames.USERS;
   }
@@ -14,12 +18,12 @@ export class UserModel extends BaseModel {
 
     return {
       type: baseSchema.type,
-      required: ["username", "email", "password"],
+      required: [userColumns.email, userColumns.password, userColumns.username],
       properties: {
         ...baseSchema.properties,
-        username: { type: "string" },
-        email: { type: "string" },
-        password: { type: "string" },
+        [userColumns.username]: { type: "string" },
+        [userColumns.email]: { type: "string" },
+        [userColumns.password]: { type: "string" },
       },
     };
   }

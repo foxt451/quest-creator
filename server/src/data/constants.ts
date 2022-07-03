@@ -1,15 +1,25 @@
+import { IQuest } from "../interfaces/IQuest";
+import { IUser } from "../interfaces/IUser";
+import { IBaseModel } from "../interfaces/IBaseModel";
+
 export const tableNames = {
   USERS: "users",
+  QUESTS: "quests",
 } as const;
 
-export const columnNames = {
-  users: {
-    email: "email",
-    username: "username",
-    password: "password",
-  },
-  base: {
-    createdAt: "created_at",
-    updatedAt: "updated_at",
-  },
+type UserColumn = keyof IUser;
+type QuestColumn = keyof IQuest;
+type BaseColumn = keyof IBaseModel;
+
+export const baseColumns: Record<BaseColumn, string> = {
+  id: "id",
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+}
+
+export const userColumns: Record<UserColumn, string> = {
+  email: "email",
+  password: "password",
+  username: "username",
+  ...baseColumns
 };

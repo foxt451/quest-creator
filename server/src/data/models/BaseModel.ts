@@ -1,16 +1,21 @@
 import { Model } from "objection";
 import { IBaseModel } from "shared/dist/interfaces/IBaseModel";
+import { baseColumns } from "../constants";
 
 export interface BaseModel extends IBaseModel {}
 
 export class BaseModel extends Model {
+  static get idColumn() {
+    return baseColumns.id;
+  }
+
   static get jsonSchema() {
     return {
       type: "object",
       properties: {
-        id: { type: "integer" },
-        createdAt: { type: "string" },
-        updatedAt: { type: "string" },
+        [baseColumns.id]: { type: "integer" },
+        [baseColumns.createdAt]: { type: "string" },
+        [baseColumns.updatedAt]: { type: "string" },
       },
     };
   }

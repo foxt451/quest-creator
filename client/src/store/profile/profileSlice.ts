@@ -9,18 +9,18 @@ import { apiUrl } from "../../env/env";
 
 interface ProfileState {
   user: IUserInfo | null;
-  jwt: string | null;
+  token: string | null;
 }
 
 const initialState: ProfileState = {
   user: null,
-  jwt: null,
+  token: null,
 };
 
 const LOGIN_QUERY = `
   mutation ${queryNames.LOGIN_PROFILE} ($email: String!, $password: String!) {
     ${endpointNames.profile.login}(email: $email, password: $password) {
-      jwt,
+      token,
       user {
         id,
         username,
@@ -37,14 +37,14 @@ export const login = createAsyncThunk<ProfileState, ILoginUser>(
       query: LOGIN_QUERY,
       variables: { ...loginData },
     });
-    return response.data.data;
+    return response.data.data[endpointNames.profile.login];
   }
 );
 
 const REGISTER_QUERY = `
   mutation ${queryNames.REGISTER_PROFILE} ($username: String!, $email: String!, $password: String!) {
     ${endpointNames.profile.register}(username: $username, email: $email, password: $password) {
-      jwt,
+      token,
       user {
         id,
         username,
@@ -70,7 +70,7 @@ export const profileSlice = createSlice({
   initialState,
   reducers: {
     logout(state) {
-      state.jwt = null;
+      state.token = null;
       state.user = null;
     },
   },
@@ -78,7 +78,7 @@ export const profileSlice = createSlice({
     builder.addMatcher(
       isAnyOf(login.fulfilled, register.fulfilled),
       (state, action) => {
-        state.jwt = action.payload.jwt;
+        state.token = action.payload.token;
         state.user = action.payload.user;
       }
     );

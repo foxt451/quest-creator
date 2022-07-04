@@ -1,5 +1,6 @@
 import { BaseModel } from "./BaseModel";
 import { JSONSchema, RelationMappings } from "objection";
+import { compare } from "../encryption";
 import { IUser } from "../../interfaces/IUser";
 import { QuestModel } from "./QuestModel";
 import { tableNames, userColumns, questColumns } from "../constants";
@@ -41,5 +42,9 @@ export class UserModel extends BaseModel {
         },
       },
     };
+  }
+
+  checkPassword(password: string): Promise<boolean> {
+    return compare(password, this.password);
   }
 }

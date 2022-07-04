@@ -9,7 +9,9 @@ import {
 import { questColumns } from "../data/constants";
 import { endpointNames } from "shared";
 import { questType, questInputType } from "./quest";
+import { authInfoType } from "./authInfo";
 import { questService } from "../services/quest-service";
+import { authService } from "../services/auth-sevice";
 
 export const mutationType = new GraphQLObjectType({
   name: "Mutation",
@@ -44,6 +46,19 @@ export const mutationType = new GraphQLObjectType({
       },
       type: new GraphQLNonNull(questType),
       resolve: (_, { id, data }) => questService.updateQuest(Number(id), data),
+    },
+    [endpointNames.profile.login]: {
+      type: new GraphQLNonNull(authInfoType),
+      args: {
+        email: {
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        password: {
+          type: new GraphQLNonNull(GraphQLString),
+        },
+      },
+      resolve: (_, { email, password }) =>
+        authService.login({ email, password }),
     },
   },
 });

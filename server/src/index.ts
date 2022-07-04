@@ -1,4 +1,6 @@
 import express, { Request, Response } from "express";
+import { graphqlHTTP } from "express-graphql";
+import { schema } from "./schemas";
 import knex from "knex";
 import knexConfig from "./knexfile";
 import { ENV } from "./env";
@@ -9,12 +11,14 @@ Model.knex(knexInstance);
 
 const app = express();
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
-});
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema: schema,
+    graphiql: ENV.DEBUG,
+  })
+);
 
 app.listen(ENV.PORT, () => {
-  console.log(
-    `⚡️[server]: Server is running at https://localhost:${ENV.PORT}`
-  );
+  console.log(`⚡️[server]: Server is running at http://localhost:${ENV.PORT}`);
 });

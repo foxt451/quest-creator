@@ -4,10 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { SubmitHandler } from "react-hook-form";
 import { updateQuest, selectQuestById } from "../store/quests/questsSlice";
 import { paths } from "../constants/paths";
+import { IQuest } from "../interfaces/IQuest";
 import { EntityId } from "@reduxjs/toolkit";
 import ErrorBox from "./ErrorBox";
 import { errorMessages } from "../constants/messages";
 import QuestForm, { FormValues } from "./QuestForm/QuestForm";
+import { IQuestUpdate } from "../interfaces/IQuestUpdate";
 
 const QuestUpdateForm: FC<{ questId: EntityId }> = ({ questId }) => {
   const dispatch = useAppDispatch();
@@ -24,11 +26,21 @@ const QuestUpdateForm: FC<{ questId: EntityId }> = ({ questId }) => {
     setError(false);
     setLoading(true);
     try {
+      const questNew: IQuest = {
+        ...quest,
+        ...data,
+      };
+
+      const questRestricted: IQuestUpdate = {
+        name: questNew.name,
+        duration: questNew.duration,
+        difficulty: questNew.difficulty,
+        description: questNew.description,
+        image: questNew.image
+      };
+
       const updatedQuest = await dispatch(
-        updateQuest({
-          id: quest.id,
-          data,
-        })
+        updateQuest({ id: questId, data: questRestricted })
       ).unwrap();
       navigate(`${paths.QUESTS}/${updatedQuest.id}`);
     } catch (e: any) {

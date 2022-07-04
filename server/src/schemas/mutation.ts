@@ -33,5 +33,17 @@ export const mutationType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLInt),
       resolve: (_, { id }) => questService.deleteQuest(Number(id)),
     },
+    [endpointNames.quests.update]: {
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLID),
+        },
+        data: {
+          type: new GraphQLNonNull(questInputType),
+        },
+      },
+      type: new GraphQLNonNull(questType),
+      resolve: (_, { id, data }) => questService.updateQuest(Number(id), data),
+    },
   },
 });

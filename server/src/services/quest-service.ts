@@ -14,5 +14,8 @@ export const questService = {
   },
   deleteQuest: async (id: number): Promise<number> => {
     return QuestModel.query().where(questColumns.id, id).delete();
-  }
+  },
+  updateQuest: async (id: number, data: any): Promise<IQuest | undefined> => {
+    return QuestModel.query().patchAndFetchById(id, data);
+  },
 };

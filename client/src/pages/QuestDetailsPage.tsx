@@ -5,6 +5,7 @@ import { pathParameters } from "../constants/paths";
 import { useParams, NavLink } from "react-router-dom";
 import { paths } from "../constants/paths";
 import ErrorBox from "../components/ErrorBox";
+import { errorMessages } from "../constants/messages";
 import { loadQuest, designateAsSelected } from "../store/quests/questsSlice";
 
 // if the questId is in cache, renders momentarily, otherwise loads the quest
@@ -38,7 +39,7 @@ const QuestDetailsPage: FC = () => {
   if (questStatus === "loading") questComponent = <div>Loading...</div>;
   else if (questStatus === "failed") {
     questComponent = (
-      <ErrorBox message={`Error: ${questError || "please try again"}`} />
+      <ErrorBox message={`${questError || errorMessages.default}`} />
     );
   } else if (questStatus === "loaded") {
     questComponent = <QuestDetails questId={questId} />;

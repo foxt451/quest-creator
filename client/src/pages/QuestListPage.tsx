@@ -6,6 +6,7 @@ import { FaPlus } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { paths } from "../constants/paths";
 import ErrorBox from "../components/ErrorBox";
+import { errorMessages } from "../constants/messages";
 import QuestList from "../components/QuestList";
 
 const QuestListPage: FC = () => {
@@ -25,7 +26,7 @@ const QuestListPage: FC = () => {
 
   if (questsStatus === "loading") return <div>Loading...</div>;
   if (questsStatus === "failed") {
-    return <ErrorBox message={`${questsError || "please try again"}`} />;
+    return <ErrorBox message={`${questsError || errorMessages.default}`} />;
   }
 
   return (

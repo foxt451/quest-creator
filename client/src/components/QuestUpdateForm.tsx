@@ -6,6 +6,7 @@ import { updateQuest, selectQuestById } from "../store/quests/questsSlice";
 import { paths } from "../constants/paths";
 import { EntityId } from "@reduxjs/toolkit";
 import ErrorBox from "./ErrorBox";
+import { errorMessages } from "../constants/messages";
 import QuestForm, { FormValues } from "./QuestForm/QuestForm";
 
 const QuestUpdateForm: FC<{ questId: EntityId }> = ({ questId }) => {
@@ -31,7 +32,7 @@ const QuestUpdateForm: FC<{ questId: EntityId }> = ({ questId }) => {
       ).unwrap();
       navigate(`${paths.QUESTS}/${updatedQuest.id}`);
     } catch (e: any) {
-      setError(e?.message ?? "Unknown error. Try again");
+      setError(e?.message ?? errorMessages.default);
     } finally {
       setLoading(false);
     }

@@ -4,6 +4,7 @@ import { useAppSelector, useAppDispatch } from "../store/hooks";
 import { pathParameters } from "../constants/paths";
 import { useParams } from "react-router-dom";
 import ErrorBox from "../components/ErrorBox";
+import { errorMessages } from "../constants/messages";
 import { loadQuest, designateAsSelected } from "../store/quests/questsSlice";
 
 const UpdateQuestPage: FC = () => {
@@ -35,7 +36,7 @@ const UpdateQuestPage: FC = () => {
   if (questStatus === "loading") questComponent = <div>Loading...</div>;
   else if (questStatus === "failed") {
     questComponent = (
-      <ErrorBox message={`Error: ${questError || "please try again"}`} />
+      <ErrorBox message={`${questError || errorMessages.default}`} />
     );
   } else if (questStatus === "loaded") {
     questComponent = <QuestUpdateForm questId={questId} />;

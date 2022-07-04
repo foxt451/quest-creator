@@ -1,4 +1,5 @@
 import axios from "axios";
+import { errorMessages } from "../constants/messages";
 
 export const request = async (
   url: string,
@@ -14,8 +15,7 @@ export const request = async (
     if (error?.response?.data?.errors) {
       if (Array.isArray(error.response.data.errors)) {
         throw new Error(
-          error.response.data.errors[0]?.message ??
-            "An error ocurred. Try again later or contact support"
+          error.response.data.errors[0]?.message ?? errorMessages.default
         );
       }
     }

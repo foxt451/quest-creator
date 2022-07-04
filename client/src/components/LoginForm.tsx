@@ -6,6 +6,7 @@ import { TextField, Button } from "@mui/material";
 import { useAppDispatch } from "../store/hooks";
 import { login } from "../store/profile/profileSlice";
 import styles from "./common-styles.module.scss";
+import { errorMessages } from "../constants/messages";
 import { ILoginUser } from "shared";
 
 const defaultData: ILoginUser = {
@@ -29,7 +30,7 @@ const LoginForm: FC = () => {
       await dispatch(login(data)).unwrap();
       navigate("/");
     } catch (e: any) {
-      setError(e?.message ?? "Unknown error. Try again");
+      setError(e?.message ?? errorMessages.default);
     } finally {
       setLoading(false);
     }

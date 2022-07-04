@@ -6,6 +6,7 @@ import { addQuest } from "../store/quests/questsSlice";
 import { paths } from "../constants/paths";
 import { questDifficulties } from "shared";
 import ErrorBox from "./ErrorBox";
+import { errorMessages } from "../constants/messages";
 import QuestForm, { FormValues } from "./QuestForm/QuestForm";
 
 const initialValues: FormValues = {
@@ -29,7 +30,7 @@ const QuestAddForm: FC = () => {
       const quest = await dispatch(addQuest(data)).unwrap();
       navigate(`${paths.QUESTS}/${quest.id}`);
     } catch (e: any) {
-      setError(e?.message ?? "Unknown error. Try again");
+      setError(e?.message ?? errorMessages.default);
     } finally {
       setLoading(false);
     }

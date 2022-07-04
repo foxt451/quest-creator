@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import ErrorBox from "./ErrorBox";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../store/hooks";
+import { errorMessages } from "../constants/messages";
 import { register as registerAction } from "../store/profile/profileSlice";
 import { TextField, Button } from "@mui/material";
 import { IRegisterUser } from "shared";
@@ -36,7 +37,7 @@ const SignupForm: FC = () => {
       await dispatch(registerAction(data)).unwrap();
       navigate("/");
     } catch (e: any) {
-      setError(e?.message ?? "Unknown error. Try again");
+      setError(e?.message ?? errorMessages.default);
     } finally {
       setLoading(false);
     }

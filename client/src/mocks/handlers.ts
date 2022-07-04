@@ -53,8 +53,8 @@ export const handlers = [
       userId: "1",
       description,
       image,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
     quests.push(newQuest);
     return res(
@@ -90,7 +90,7 @@ export const handlers = [
       difficulty,
       description,
       image,
-      updatedAt: Date.now(),
+      updatedAt: new Date().toISOString(),
     };
 
     quests[oldQuestIndex] = newQuest;

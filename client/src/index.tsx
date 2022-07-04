@@ -11,7 +11,7 @@ const container = document.getElementById("root")!;
 const root = createRoot(container);
 
 function prepare() {
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.REACT_APP_MOCK === "true") {
     const { worker }: { worker: SetupWorkerApi } = require("./mocks/browser");
     return worker.start({ onUnhandledRequest: "bypass" });
   }

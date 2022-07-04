@@ -1,9 +1,8 @@
 import { IQuest } from "../../interfaces/IQuest";
 import { RootState } from "../store";
 import { queryNames, inputTypeNames } from "../../constants/graphql";
-import axios from "axios";
+import { request } from "../../helpers/graphql";
 import { apiUrl } from "../../env/env";
-import { GraphQLJsonRequestBody } from "msw";
 import { FormValues } from "../../components/QuestForm/QuestForm";
 import {
   createSlice,
@@ -14,7 +13,8 @@ import {
 } from "@reduxjs/toolkit";
 
 const questsAdapter = createEntityAdapter<IQuest>({
-  sortComparer: (a, b) => a.createdAt - b.createdAt,
+  sortComparer: (a, b) =>
+    a.createdAt < b.createdAt ? -1 : a.createdAt > b.createdAt ? 1 : 0,
 });
 
 const QUESTS_QUERY = `
@@ -25,7 +25,10 @@ const QUESTS_QUERY = `
       description,
       image,
       difficulty,
-      duration
+      duration,
+      createdAt,
+      updatedAt,
+      userId
     }
   }
 `;
@@ -33,13 +36,10 @@ const QUESTS_QUERY = `
 export const loadQuests = createAsyncThunk<IQuest[]>(
   "quests/loadQuests",
   async () => {
-    const response = await axios.post<any, any, GraphQLJsonRequestBody<{}>>(
-      apiUrl,
-      {
-        query: QUESTS_QUERY,
-        variables: {},
-      }
-    );
+    const response = await request(apiUrl, {
+      query: QUESTS_QUERY,
+      variables: {},
+    });
     return response.data.data.quests;
   }
 );
@@ -60,11 +60,7 @@ const QUEST_QUERY = `
 export const loadQuest = createAsyncThunk<IQuest, EntityId>(
   "quests/loadQuest",
   async (id: EntityId) => {
-    const response = await axios.post<
-      any,
-      any,
-      GraphQLJsonRequestBody<{ id: EntityId }>
-    >(apiUrl, {
+    const response = await request(apiUrl, {
       query: QUEST_QUERY,
       variables: { id },
     });
@@ -98,11 +94,7 @@ const QUEST_ADD_QUERY = `
 export const addQuest = createAsyncThunk<IQuest, FormValues>(
   "quests/addQuest",
   async (values) => {
-    const response = await axios.post<
-      any,
-      any,
-      GraphQLJsonRequestBody<{ data: FormValues }>
-    >(apiUrl, {
+    const response = await request(apiUrl, {
       query: QUEST_ADD_QUERY,
       variables: { data: values },
     });
@@ -127,11 +119,7 @@ export const updateQuest = createAsyncThunk<
   IQuest,
   { id: EntityId; data: FormValues }
 >("quests/updateQuest", async ({ id, data }) => {
-  const response = await axios.post<
-    any,
-    any,
-    GraphQLJsonRequestBody<{ id: EntityId; data: FormValues }>
-  >(apiUrl, {
+  const response = await request(apiUrl, {
     query: QUEST_UPDATE_QUERY,
     variables: { id, data },
   });
@@ -149,13 +137,10 @@ const QUEST_DELETE_QUERY = `
 export const deleteQuest = createAsyncThunk<EntityId, EntityId>(
   "quests/deleteQuest",
   async (id) => {
-    await axios.post<any, any, GraphQLJsonRequestBody<{ id: EntityId }>>(
-      apiUrl,
-      {
-        query: QUEST_DELETE_QUERY,
-        variables: { id },
-      }
-    );
+    await request(apiUrl, {
+      query: QUEST_DELETE_QUERY,
+      variables: { id },
+    });
     return id;
   }
 );

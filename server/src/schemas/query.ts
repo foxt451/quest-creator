@@ -1,11 +1,18 @@
-import { GraphQLObjectType, GraphQLString } from "graphql";
+import {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLNonNull,
+  GraphQLList,
+} from "graphql";
+import { questType } from "./quest";
+import { questService } from "../services/quest-service";
 
 export const queryType = new GraphQLObjectType({
   name: "Query",
   fields: {
-    hello: {
-      type: GraphQLString,
-      resolve: () => "world",
+    quests: {
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(questType))),
+      resolve: () => questService.getQuests(),
     },
   },
 });

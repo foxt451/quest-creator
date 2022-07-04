@@ -11,24 +11,24 @@ export const users: MockUser[] = [
     username: "alex",
     email: "alex@gmail.com",
     password: "alex",
-    createdAt: 1656860658,
-    updatedAt: 1656860658,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
   {
     id: "2",
     username: "lena",
     email: "lena@gmail.com",
     password: "lena",
-    createdAt: 1656860658,
-    updatedAt: 1656860658,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
   {
     id: "3",
     username: "dora",
     email: "dora@gmail.com",
     password: "dora",
-    createdAt: 1656860658,
-    updatedAt: 1656860658,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
 ];
 
@@ -46,8 +46,8 @@ export const registerUser = (user: IRegisterUser): IUserInfo => {
   const newUser: MockUser = {
     ...user,
     id: `${users.length + 1}`,
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   };
   users.push(newUser);
   return sanitizeUser(newUser);

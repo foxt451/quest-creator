@@ -25,7 +25,7 @@ const QuestListPage: FC = () => {
 
   if (questsStatus === "loading") return <div>Loading...</div>;
   if (questsStatus === "failed") {
-    return <ErrorBox message={`Error: ${questsError || "please try again"}`} />;
+    return <ErrorBox message={`${questsError || "please try again"}`} />;
   }
 
   return (

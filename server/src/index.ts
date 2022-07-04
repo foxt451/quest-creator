@@ -5,11 +5,14 @@ import knex from "knex";
 import knexConfig from "./knexfile";
 import { ENV } from "./env";
 import { Model } from "objection";
+import cors from "cors";
 
 const knexInstance = knex(knexConfig);
 Model.knex(knexInstance);
 
 const app = express();
+
+app.use(cors());
 
 app.use(
   "/graphql",

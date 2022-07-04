@@ -4,7 +4,7 @@ import { IRegisterUser, ILoginUser } from "shared";
 import { RootState } from "../store";
 import { queryNames, inputTypeNames } from "../../constants/graphql";
 import { GraphQLJsonRequestBody } from "msw";
-import axios from "axios";
+import { request } from "../../helpers/graphql";
 import { apiUrl } from "../../env/env";
 
 interface ProfileState {
@@ -33,11 +33,7 @@ const LOGIN_QUERY = `
 export const login = createAsyncThunk<ProfileState, ILoginUser>(
   "profile/login",
   async (loginData) => {
-    const response = await axios.post<
-      any,
-      any,
-      GraphQLJsonRequestBody<ILoginUser>
-    >(apiUrl, {
+    const response = await request(apiUrl, {
       query: LOGIN_QUERY,
       variables: { ...loginData },
     });
@@ -61,11 +57,7 @@ const REGISTER_QUERY = `
 export const register = createAsyncThunk<ProfileState, IRegisterUser>(
   "profile/register",
   async (registerData) => {
-    const response = await axios.post<
-      any,
-      any,
-      GraphQLJsonRequestBody<IRegisterUser>
-    >(apiUrl, {
+    const response = await request(apiUrl, {
       query: REGISTER_QUERY,
       variables: { ...registerData },
     });

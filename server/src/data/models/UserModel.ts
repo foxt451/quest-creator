@@ -1,6 +1,8 @@
 import { BaseModel } from "./BaseModel";
+import { JSONSchema, RelationMappings } from "objection";
 import { IUser } from "../../interfaces/IUser";
-import { tableNames, userColumns } from "../constants";
+import { QuestModel } from "./QuestModel";
+import { tableNames, userColumns, questColumns } from "../constants";
 
 export interface UserModel extends IUser {}
 
@@ -13,7 +15,7 @@ export class UserModel extends BaseModel {
     return tableNames.USERS;
   }
 
-  static get jsonSchema() {
+  static get jsonSchema(): JSONSchema {
     const baseSchema = super.jsonSchema;
 
     return {
@@ -24,6 +26,19 @@ export class UserModel extends BaseModel {
         [userColumns.username]: { type: "string" },
         [userColumns.email]: { type: "string" },
         [userColumns.password]: { type: "string" },
+      },
+    };
+  }
+
+  static get relationMappings(): RelationMappings {
+    return {
+      quests: {
+        relation: BaseModel.HasManyRelation,
+        modelClass: QuestModel,
+        join: {
+          from: `${tableNames.USERS}.${userColumns.id}`,
+          to: `${tableNames.QUESTS}.${questColumns.userId}`,
+        },
       },
     };
   }

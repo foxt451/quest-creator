@@ -1,4 +1,4 @@
-import { Model } from "objection";
+import { Model, JSONSchema } from "objection";
 import { IBaseModel } from "shared/dist/interfaces/IBaseModel";
 import { baseColumns } from "../constants";
 
@@ -9,7 +9,7 @@ export class BaseModel extends Model {
     return baseColumns.id;
   }
 
-  static get jsonSchema() {
+  static get jsonSchema() : JSONSchema {
     return {
       type: "object",
       properties: {

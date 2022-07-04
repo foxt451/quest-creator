@@ -15,11 +15,21 @@ export const baseColumns: Record<BaseColumn, string> = {
   id: "id",
   createdAt: "createdAt",
   updatedAt: "updatedAt",
-}
+};
 
 export const userColumns: Record<UserColumn, string> = {
   email: "email",
   password: "password",
   username: "username",
-  ...baseColumns
+  ...baseColumns,
+};
+
+export const questColumns: Record<QuestColumn, string> = {
+  description: "description",
+  difficulty: "difficulty",
+  duration: "duration",
+  name: "name",
+  image: "image",
+  userId: "userId",
+  ...baseColumns,
 };

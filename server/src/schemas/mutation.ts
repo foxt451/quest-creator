@@ -60,5 +60,21 @@ export const mutationType = new GraphQLObjectType({
       resolve: (_, { email, password }) =>
         authService.login({ email, password }),
     },
+    [endpointNames.profile.register]: {
+      type: new GraphQLNonNull(authInfoType),
+      args: {
+        username: {
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        email: {
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        password: {
+          type: new GraphQLNonNull(GraphQLString),
+        },
+      },
+      resolve: (_, { username, email, password }) =>
+        authService.register({ username, email, password }),
+    },
   },
 });

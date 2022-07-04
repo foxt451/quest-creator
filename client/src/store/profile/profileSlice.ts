@@ -61,7 +61,7 @@ export const register = createAsyncThunk<ProfileState, IRegisterUser>(
       query: REGISTER_QUERY,
       variables: { ...registerData },
     });
-    return response.data.data;
+    return response.data.data[endpointNames.profile.register];
   }
 );
 

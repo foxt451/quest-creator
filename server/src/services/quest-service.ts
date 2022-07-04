@@ -7,15 +7,21 @@ export const questService = {
     return QuestModel.query();
   },
   getQuest: async (id: number): Promise<IQuest | undefined> => {
-    return QuestModel.query().where(questColumns.id, id).first();
+    return QuestModel.query()
+      .where(questColumns.id, id)
+      .first()
+      .throwIfNotFound();
   },
   addQuest: async (data: any): Promise<IQuest> => {
     return QuestModel.query().insert(data);
   },
   deleteQuest: async (id: number): Promise<number> => {
-    return QuestModel.query().where(questColumns.id, id).delete();
+    return QuestModel.query()
+      .where(questColumns.id, id)
+      .delete()
+      .throwIfNotFound();
   },
   updateQuest: async (id: number, data: any): Promise<IQuest | undefined> => {
-    return QuestModel.query().patchAndFetchById(id, data);
+    return QuestModel.query().patchAndFetchById(id, data).throwIfNotFound();
   },
 };

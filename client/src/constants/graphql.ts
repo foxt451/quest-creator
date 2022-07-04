@@ -9,8 +9,4 @@ const queryNames = {
   REGISTER_PROFILE: "RegisterProfile",
 } as const;
 
-const inputTypeNames = {
-  QUEST_DATA: "QuestData",
-};
-
-export { queryNames, inputTypeNames };
+export { queryNames };

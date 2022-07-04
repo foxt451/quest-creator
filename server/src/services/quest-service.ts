@@ -9,4 +9,10 @@ export const questService = {
   getQuest: async (id: number): Promise<IQuest | undefined> => {
     return QuestModel.query().where(questColumns.id, id).first();
   },
+  addQuest: async (data: any): Promise<IQuest> => {
+    return QuestModel.query().insert(data);
+  },
+  deleteQuest: async (id: number): Promise<number> => {
+    return QuestModel.query().where(questColumns.id, id).delete();
+  }
 };

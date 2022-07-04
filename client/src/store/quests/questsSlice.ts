@@ -1,6 +1,7 @@
 import { IQuest } from "../../interfaces/IQuest";
 import { RootState } from "../store";
-import { queryNames, inputTypeNames } from "../../constants/graphql";
+import { queryNames } from "../../constants/graphql";
+import { inputTypeNames, endpointNames } from "shared";
 import { request } from "../../helpers/graphql";
 import { apiUrl } from "../../env/env";
 import { FormValues } from "../../components/QuestForm/QuestForm";
@@ -19,7 +20,7 @@ const questsAdapter = createEntityAdapter<IQuest>({
 
 const QUESTS_QUERY = `
   query ${queryNames.QUESTS} {
-    quests {
+    ${endpointNames.quests.all} {
       id,
       name,
       description,
@@ -40,13 +41,13 @@ export const loadQuests = createAsyncThunk<IQuest[]>(
       query: QUESTS_QUERY,
       variables: {},
     });
-    return response.data.data.quests;
+    return response.data.data[endpointNames.quests.all];
   }
 );
 
 const QUEST_QUERY = `
   query ${queryNames.QUEST} ($id: ID!) {
-    quest(id: $id) {
+    ${endpointNames.quests.one}(id: $id) {
       id,
       name,
       description,
@@ -64,7 +65,7 @@ export const loadQuest = createAsyncThunk<IQuest, EntityId>(
       query: QUEST_QUERY,
       variables: { id },
     });
-    return response.data.data.quest;
+    return response.data.data[endpointNames.quests.one];
   }
 );
 
@@ -80,7 +81,7 @@ export const loadQuest = createAsyncThunk<IQuest, EntityId>(
 
 const QUEST_ADD_QUERY = `
   mutation ${queryNames.ADD_QUEST} ($data: ${inputTypeNames.QUEST_DATA}!) {
-    addQuest(data: $data) {
+    ${endpointNames.quests.add}(data: $data) {
       id,
       name,
       description,
@@ -98,13 +99,14 @@ export const addQuest = createAsyncThunk<IQuest, FormValues>(
       query: QUEST_ADD_QUERY,
       variables: { data: values },
     });
-    return response.data.data.quest;
+
+    return response.data.data[endpointNames.quests.add];
   }
 );
 
 const QUEST_UPDATE_QUERY = `
   mutation ${queryNames.UPDATE_QUEST} ($id: ID!, $data: ${inputTypeNames.QUEST_DATA}!) {
-    updateQuest(id: $id, data: $data) {
+    ${endpointNames.quests.update}(id: $id, data: $data) {
       id,
       name,
       description,
@@ -123,14 +125,12 @@ export const updateQuest = createAsyncThunk<
     query: QUEST_UPDATE_QUERY,
     variables: { id, data },
   });
-  return response.data.data.quest;
+  return response.data.data[endpointNames.quests.update];
 });
 
 const QUEST_DELETE_QUERY = `
   mutation ${queryNames.DELETE_QUEST} ($id: ID!) {
-    deleteQuest(id: $id) {
-      id
-    }
+    ${endpointNames.quests.delete}(id: $id)
   }
 `;
 
@@ -226,6 +226,7 @@ export const questsSlice = createSlice({
     builder.addCase(
       addQuest.fulfilled,
       (state, action: PayloadAction<IQuest>) => {
+        console.log(action.payload);
         questsAdapter.upsertOne(state, action.payload);
         state.questsPage = {
           error: null,

@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk, isAnyOf } from "@reduxjs/toolkit";
 import { IUserInfo } from "../../interfaces/IUserInfo";
 import { IRegisterUser, ILoginUser } from "shared";
 import { RootState } from "../store";
-import { queryNames, inputTypeNames } from "../../constants/graphql";
-import { GraphQLJsonRequestBody } from "msw";
+import { queryNames } from "../../constants/graphql";
+import { endpointNames } from "shared";
 import { request } from "../../helpers/graphql";
 import { apiUrl } from "../../env/env";
 
@@ -19,7 +19,7 @@ const initialState: ProfileState = {
 
 const LOGIN_QUERY = `
   mutation ${queryNames.LOGIN_PROFILE} ($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+    ${endpointNames.profile.login}(email: $email, password: $password) {
       jwt,
       user {
         id,
@@ -43,7 +43,7 @@ export const login = createAsyncThunk<ProfileState, ILoginUser>(
 
 const REGISTER_QUERY = `
   mutation ${queryNames.REGISTER_PROFILE} ($username: String!, $email: String!, $password: String!) {
-    register(username: $username, email: $email, password: $password) {
+    ${endpointNames.profile.register}(username: $username, email: $email, password: $password) {
       jwt,
       user {
         id,

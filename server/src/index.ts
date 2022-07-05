@@ -6,6 +6,7 @@ import knexConfig from "./knexfile";
 import { ENV } from "./env";
 import { Model } from "objection";
 import cors from "cors";
+import { expressjwt } from "express-jwt";
 
 const knexInstance = knex(knexConfig);
 Model.knex(knexInstance);

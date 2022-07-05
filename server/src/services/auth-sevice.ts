@@ -8,7 +8,7 @@ import { IUser } from "../interfaces/IUser";
 
 export const authService = {
   async generateToken(userId: number): Promise<string> {
-    const token = jwt.sign({ userId }, ENV.JWT_SECRET, {
+    const token = jwt.sign({ id: userId }, ENV.JWT_SECRET, {
       expiresIn: ENV.JWT_LIFETIME,
     });
     return token;

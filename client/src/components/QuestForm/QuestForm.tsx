@@ -59,15 +59,21 @@ const QuestForm: FC<{
         {...register("name", { required: "Please enter a title" })}
         margin="normal"
       />
-      <TextField
-        multiline
-        fullWidth
-        rows={7}
-        label="Description"
-        error={Boolean(errors.description)}
-        helperText={errors.description?.message}
-        {...register("description")}
-        margin="normal"
+      <Controller
+        name="description"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            multiline
+            fullWidth
+            rows={7}
+            label="Description"
+            error={Boolean(errors.description)}
+            helperText={errors.description?.message}
+            {...field}
+            margin="normal"
+          />
+        )}
       />
       <Typography variant="h6" component="p">
         Approximate duration (in hours)

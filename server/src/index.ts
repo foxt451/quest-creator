@@ -6,7 +6,7 @@ import knexConfig from "./knexfile";
 import { ENV } from "./env";
 import { Model } from "objection";
 import cors from "cors";
-import { expressjwt } from "express-jwt";
+import { expressjwt, Request as AuthRequest } from "express-jwt";
 
 const knexInstance = knex(knexConfig);
 Model.knex(knexInstance);
@@ -24,10 +24,13 @@ app.use(
 );
 app.use(
   "/graphql",
-  graphqlHTTP({
+  graphqlHTTP((req, res, graphQLParams) => ({
     schema: schema,
-    graphiql: ENV.DEBUG
-  })
+    graphiql: ENV.DEBUG,
+    context: {
+      user: (req as AuthRequest).auth,
+    },
+  }))
 );
 
 app.listen(ENV.PORT, () => {

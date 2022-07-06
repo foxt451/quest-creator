@@ -1,20 +1,33 @@
 import useFetch from "./useFetch";
 import { apiUrl } from "../env/env";
+import { GQLRequestBody } from "../types/fetching/GQLRequestBody";
+import { errorMessages } from "../constants/messages";
+import { GraphQLResponseRoot } from "../types/fetching/GQLResponse";
+import { handleGraphQLResponse } from "../helpers/graphql";
+import { LoadingHookResult } from "../types/fetching/LoadingHookResult";
 
-const useGQLFetch = (
-  {
-    baseURL = apiUrl,
-    query,
-    variables = {},
-  }: { baseURL?: string; query: string; variables?: Record<string, any> },
-  deps: any[]
-) => {
-  const { data, error, loading } = useFetch(
-    { baseURL, data: { query, variables }, method: "POST" },
+const useGQLFetch = <TResult>(
+  { url = apiUrl, body }: { url?: string; body: GQLRequestBody },
+  deps: unknown[]
+): LoadingHookResult<TResult> => {
+  const {
+    data: GQLData,
+    error,
+    loading,
+  } = useFetch<GraphQLResponseRoot<TResult>, GQLRequestBody>(
+    { url, method: "POST", data: body },
     deps
   );
-
-  return { data: data?.data, error, loading };
+  try {
+    const data = GQLData === null ? GQLData : handleGraphQLResponse(GQLData);
+    return { data, error, loading };
+  } catch (error) {
+    return {
+      data: null,
+      error: error instanceof Error ? error.message : errorMessages.default,
+      loading,
+    };
+  }
 };
 
 export default useGQLFetch;

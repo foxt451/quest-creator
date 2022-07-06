@@ -3,7 +3,13 @@ import { JSONSchema, RelationMappings } from "objection";
 import { compare } from "../encryption";
 import { IUser } from "../../interfaces/IUser";
 import { QuestModel } from "./QuestModel";
-import { tableNames, userColumns, questColumns } from "../constants";
+import { RefreshTokenModel } from "./RefreshTokenModel";
+import {
+  tableNames,
+  userColumns,
+  questColumns,
+  refreshTokenColumns,
+} from "../constants";
 
 export interface UserModel extends IUser {}
 
@@ -39,6 +45,15 @@ export class UserModel extends BaseModel {
         join: {
           from: `${tableNames.USERS}.${userColumns.id}`,
           to: `${tableNames.QUESTS}.${questColumns.userId}`,
+        },
+      },
+      tokens: {
+        // potentially many, but according to business rules - one (or none)
+        relation: BaseModel.HasManyRelation,
+        modelClass: RefreshTokenModel,
+        join: {
+          from: `${tableNames.USERS}.${userColumns.id}`,
+          to: `${tableNames.REFRESH_TOKENS}.${refreshTokenColumns.userId}`,
         },
       },
     };

@@ -12,7 +12,10 @@ const instance = axios.create({
 instance.interceptors.request.use(function (config) {
   const token = store.getState().profile.authInfo.accessToken;
   if (token) {
-    config.headers!.Authorization = `Bearer ${token}`;
+    if (!config.headers) {
+      config.headers = {};
+    }
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
@@ -48,8 +51,8 @@ instance.interceptors.response.use(
 );
 
 export const apiService = {
-  async post(url: string, data: Record<string, unknown>): Promise<any> {
-    const response = await instance.post(url, data);
-    return response;
+  async post<TResult, TBody>(url: string, data: TBody): Promise<TResult> {
+    const response = await instance.post<TResult>(url, data);
+    return response.data;
   },
 };

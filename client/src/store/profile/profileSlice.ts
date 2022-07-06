@@ -4,7 +4,7 @@ import { IRegisterUser, ILoginUser } from "shared";
 import { RootState } from "../store";
 import { queryNames } from "../../constants/graphql";
 import { endpointNames } from "shared";
-import { request } from "../../services/graphql";
+import { request } from "../../helpers/graphql";
 import { apiUrl } from "../../env/env";
 
 interface ProfileState {

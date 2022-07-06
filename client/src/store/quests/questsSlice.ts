@@ -3,7 +3,7 @@ import { QuestUpdate } from "../../interfaces/IQuestUpdate";
 import { RootState } from "../store";
 import { queryNames } from "../../constants/graphql";
 import { inputTypeNames, endpointNames } from "shared";
-import { request } from "../../services/graphql";
+import { request } from "../../helpers/graphql";
 import { apiUrl } from "../../env/env";
 import { FormValues } from "../../components/QuestForm/QuestForm";
 import {
@@ -19,21 +19,25 @@ const questsAdapter = createEntityAdapter<IQuest>({
     a.createdAt < b.createdAt ? -1 : a.createdAt > b.createdAt ? 1 : 0,
 });
 
+const QUEST_DEFAULT_FIELDS = `
+id,
+name,
+description,
+image,
+difficulty,
+duration,
+createdAt,
+updatedAt,
+user {
+  id,
+  username
+}
+`;
+
 const QUESTS_QUERY = `
   query ${queryNames.QUESTS} {
     ${endpointNames.quests.all} {
-      id,
-      name,
-      description,
-      image,
-      difficulty,
-      duration,
-      createdAt,
-      updatedAt,
-      user {
-        id,
-        username
-      }
+      ${QUEST_DEFAULT_FIELDS}
     }
   }
 `;
@@ -52,18 +56,7 @@ export const loadQuests = createAsyncThunk<IQuest[]>(
 const QUEST_QUERY = `
   query ${queryNames.QUEST} ($id: ID!) {
     ${endpointNames.quests.one}(id: $id) {
-      id,
-      name,
-      description,
-      image,
-      difficulty,
-      duration,
-      createdAt,
-      updatedAt,
-      user {
-        id,
-        username
-      }
+      ${QUEST_DEFAULT_FIELDS}
     }
   }
 `;
@@ -92,18 +85,7 @@ export const loadQuest = createAsyncThunk<IQuest, EntityId>(
 const QUEST_ADD_QUERY = `
   mutation ${queryNames.ADD_QUEST} ($data: ${inputTypeNames.QUEST_DATA}!) {
     ${endpointNames.quests.add}(data: $data) {
-      id,
-      name,
-      description,
-      image,
-      difficulty,
-      duration,
-      createdAt,
-      updatedAt,
-      user {
-        id,
-        username,
-      }
+      ${QUEST_DEFAULT_FIELDS}
     }
   }
 `;
@@ -123,18 +105,7 @@ export const addQuest = createAsyncThunk<IQuest, FormValues>(
 const QUEST_UPDATE_QUERY = `
   mutation ${queryNames.UPDATE_QUEST} ($id: ID!, $data: ${inputTypeNames.QUEST_DATA}!) {
     ${endpointNames.quests.update}(id: $id, data: $data) {
-      id,
-      name,
-      description,
-      image,
-      difficulty,
-      duration,
-      createdAt,
-      updatedAt,
-      user {
-        id,
-        username,
-      }
+      ${QUEST_DEFAULT_FIELDS}
     }
   }
 `;

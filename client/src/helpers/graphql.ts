@@ -1,5 +1,5 @@
 import { errorMessages } from "../constants/messages";
-import { apiService } from "./api-service";
+import { apiService } from "../services/api-service";
 
 export const request = async (
   url: string,

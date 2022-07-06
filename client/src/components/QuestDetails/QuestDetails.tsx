@@ -5,6 +5,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { paths } from "../../constants/paths";
+import { defaultImages } from "../../constants/defaultImages";
 import { selectQuestById, deleteQuest } from "../../store/quests/questsSlice";
 import { selectUser } from "../../store/profile/profileSlice";
 import { Box, Typography, Divider, Fab } from "@mui/material";
@@ -37,7 +38,15 @@ const QuestDetails: FC<{ questId: EntityId }> = ({ questId }) => {
     <Box padding={2} sx={{ height: "100%" }}>
       {error && <ErrorBox message={error} />}
       {quest.image && (
-        <img src={quest.image} alt="quest" className={styles.questImage} />
+        <img
+          src={quest.image}
+          alt="quest"
+          className={styles.questImage}
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null; // prevents looping
+            currentTarget.src = defaultImages.defaultQuestImage;
+          }}
+        />
       )}
       <Divider sx={{ margin: "1rem" }}>Title</Divider>
       <Typography variant="h5" component="h2">

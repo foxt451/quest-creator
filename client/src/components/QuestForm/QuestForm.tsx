@@ -75,13 +75,20 @@ const QuestForm: FC<{
           />
         )}
       />
+      <TextField
+        label="Quest cover image URL"
+        error={Boolean(errors.image)}
+        helperText={errors.image?.message}
+        {...register("image")}
+        margin="normal"
+      />
       <Typography variant="h6" component="p">
         Approximate duration (in hours)
       </Typography>
       <Controller
         name="duration"
         control={control}
-        render={({ field: { onChange, onBlur, value, name, ref } }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <Slider
             onBlur={onBlur}
             onChange={onChange}

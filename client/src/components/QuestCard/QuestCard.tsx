@@ -45,6 +45,10 @@ const QuestCard: FC<{ questId: EntityId }> = ({ questId }) => {
           src={quest.image ?? defaultImages.defaultQuestImage}
           alt="quest"
           className={styles.questImage}
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null; // prevents looping
+            currentTarget.src = defaultImages.defaultQuestImage;
+          }}
         />
         <Divider sx={{ margin: "1rem" }}>About</Divider>
         <NavLink to={`${paths.QUESTS}/${questId}`}>

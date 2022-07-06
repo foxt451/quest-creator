@@ -1,5 +1,5 @@
 import yup, { SchemaOf } from "yup";
-import { IRegisterUser } from "../interfaces";
+import { IRegisterUser } from "../types";
 import { validationConstants } from "./constants";
 const userConstants = validationConstants.user;
 

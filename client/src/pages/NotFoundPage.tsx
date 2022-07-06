@@ -7,7 +7,7 @@ const NotFoundPage: FC = () => {
     <div>
       <FaBan />
       <br />
-      Oops.. This path doesn't exist.
+      Oops.. This path doesn&apos;t exist.
       <br />
       <NavLink to="/">Go to main page</NavLink>
     </div>

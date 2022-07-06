@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { IQuest } from "../../interfaces/IQuest";
+import { IQuest } from "../../types/models/IQuest";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import {
   TextField,

@@ -1,7 +1,7 @@
-import { IQuest } from "../interfaces/IQuest";
-import { IUser } from "../interfaces/IUser";
-import { IBaseModel } from "../interfaces/IBaseModel";
-import { IRefreshToken } from "../interfaces/IRefreshToken";
+import { IQuest } from "../types/IQuest";
+import { IUser } from "../types/IUser";
+import { IBaseModel } from "../types/IBaseModel";
+import { IRefreshToken } from "../types/IRefreshToken";
 
 export const tableNames = {
   USERS: "users",

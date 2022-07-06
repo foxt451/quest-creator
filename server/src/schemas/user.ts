@@ -5,7 +5,7 @@ import {
   GraphQLInputObjectType,
   GraphQLInt,
 } from "graphql";
-import { IUser } from "../interfaces/IUser";
+import { IUser } from "../types/IUser";
 import { inputTypeNames } from "shared";
 
 export const userType = new GraphQLObjectType({

@@ -1,5 +1,5 @@
 import { BaseModel } from "./BaseModel";
-import { IQuest } from "../../interfaces/IQuest";
+import { IQuest } from "../../types/IQuest";
 import { tableNames, questColumns, userColumns } from "../constants";
 import { RelationMappings, JSONSchema } from "objection";
 import { UserModel } from "./UserModel";

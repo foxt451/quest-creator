@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { SubmitHandler } from "react-hook-form";
 import { updateQuest, selectQuestById } from "../store/quests/questsSlice";
 import { paths } from "../constants/paths";
-import { IQuest } from "../interfaces/IQuest";
+import { IQuest } from "../types/models/IQuest";
 import { EntityId } from "@reduxjs/toolkit";
 import ErrorBox from "./ErrorBox";
 import { errorMessages } from "../constants/messages";
 import QuestForm, { FormValues } from "./QuestForm/QuestForm";
-import { QuestUpdate } from "../interfaces/IQuestUpdate";
+import { QuestUpdate } from "../types/IQuestUpdate";
 
 const QuestUpdateForm: FC<{ questId: EntityId }> = ({ questId }) => {
   const dispatch = useAppDispatch();

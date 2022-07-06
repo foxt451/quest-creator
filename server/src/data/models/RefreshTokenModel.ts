@@ -1,6 +1,6 @@
 import { BaseModel } from "./BaseModel";
 import { JSONSchema, RelationMappings } from "objection";
-import { IRefreshToken } from "../../interfaces/IRefreshToken";
+import { IRefreshToken } from "../../types/IRefreshToken";
 import { UserModel } from "./UserModel";
 import { generateUnguessableString, hash } from "../../encryption";
 import { tableNames, userColumns, refreshTokenColumns } from "../constants";

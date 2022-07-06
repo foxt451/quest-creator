@@ -1,17 +1,27 @@
-import { useState, useEffect, useCallback } from "react";
-import axios, { AxiosRequestConfig } from "axios";
+import { useState, useEffect } from "react";
+import { ErrorState } from "../types/fetching/ErrorState";
+import { RequestConfig } from "../types/fetching/RequestConfig";
+import { apiService } from "../services/api-service/api-service";
+import { errorMessages } from "../constants/messages";
 
-const useFetch = <D>(config: AxiosRequestConfig<D>, deps: any[]) => {
-  const [data, setData] = useState<any>();
-  const [error, setError] = useState<any>();
+const useFetch = <TResult, TData>(
+  config: RequestConfig<TData>,
+  deps: unknown[]
+) => {
+  const [data, setData] = useState<TResult>();
+  const [error, setError] = useState<ErrorState>();
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     try {
-      const response = await axios(config);
-      setData(response.data);
+      const response = await apiService.sendRequest<TResult, TData>(config);
+      setData(response);
+      setError(false);
     } catch (error) {
-      setError(error);
+      if (error instanceof Error) {
+        setError(error.message);
+      }
+      setError(errorMessages.default);
     } finally {
       setLoading(false);
     }
@@ -19,7 +29,6 @@ const useFetch = <D>(config: AxiosRequestConfig<D>, deps: any[]) => {
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...deps]);
 
   return { data, error, loading };

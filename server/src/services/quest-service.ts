@@ -1,4 +1,4 @@
-import { IQuest } from "../interfaces/IQuest";
+import { IQuest } from "../types/IQuest";
 import { QuestModel } from "../data/models/QuestModel";
 import { questColumns } from "../data/constants";
 

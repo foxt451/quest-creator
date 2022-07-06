@@ -1,5 +1,5 @@
-import { IQuest } from "../../interfaces/IQuest";
-import { QuestUpdate } from "../../interfaces/IQuestUpdate";
+import { IQuest } from "../../types/models/IQuest";
+import { QuestUpdate } from "../../types/IQuestUpdate";
 import { RootState } from "../store";
 import { queryNames } from "../../constants/graphql";
 import { inputTypeNames, endpointNames } from "shared";

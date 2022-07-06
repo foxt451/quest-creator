@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, isAnyOf } from "@reduxjs/toolkit";
-import { IUserInfo } from "../../interfaces/IUserInfo";
+import { IUserInfo } from "../../types/IUserInfo";
 import { IRegisterUser, ILoginUser } from "shared";
 import { RootState } from "../store";
 import { queryNames } from "../../constants/graphql";

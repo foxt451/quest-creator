@@ -1,4 +1,4 @@
-import { IQuest } from "../../interfaces/IQuest";
+import { IQuest } from "../../types/IQuest";
 
 const getRandom = (upperId: number, lowerId: number) => {
   return Math.floor(Math.random() * (upperId - lowerId + 1)) + lowerId;

@@ -6,7 +6,7 @@ import { UserModel } from "../data/models/UserModel";
 import { RefreshTokenModel } from "../data/models/RefreshTokenModel";
 import { userColumns } from "../data/constants";
 import { compare } from "../encryption";
-import { IUser } from "../interfaces/IUser";
+import { IUser } from "../types/IUser";
 
 export interface ITokenPair {
   accessToken: string;

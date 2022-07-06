@@ -6,7 +6,7 @@ import {
   GraphQLInt,
 } from "graphql";
 import { authService } from "../services/auth-sevice";
-import { IUser } from "../interfaces/IUser";
+import { IUser } from "../types/IUser";
 import { userType } from "./user";
 import { ITokenPair } from "../services/auth-sevice";
 

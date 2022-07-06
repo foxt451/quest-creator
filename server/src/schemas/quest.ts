@@ -8,7 +8,7 @@ import {
 import { inputTypeNames } from "shared";
 import { userType } from "./user";
 import { userService } from "../services/user-service";
-import { IQuest } from "../interfaces/IQuest";
+import { IQuest } from "../types/IQuest";
 
 export const questType = new GraphQLObjectType({
   name: "Quest",

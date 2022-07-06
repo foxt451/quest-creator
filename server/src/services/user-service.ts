@@ -1,5 +1,5 @@
-import { IQuest } from "../interfaces/IQuest";
-import { IUser } from "../interfaces/IUser";
+import { IQuest } from "../types/IQuest";
+import { IUser } from "../types/IUser";
 import { UserModel } from "../data/models/UserModel";
 
 export const userService = {

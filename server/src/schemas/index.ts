@@ -25,6 +25,7 @@ const permissions = shield(
       "*": isAuthenticated,
       [endpointNames.profile.login]: allow,
       [endpointNames.profile.register]: allow,
+      [endpointNames.profile.refreshTokens]: allow,
     },
   },
   { allowExternalErrors: true }

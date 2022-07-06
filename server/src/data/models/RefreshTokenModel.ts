@@ -2,6 +2,7 @@ import { BaseModel } from "./BaseModel";
 import { JSONSchema, RelationMappings } from "objection";
 import { IRefreshToken } from "../../interfaces/IRefreshToken";
 import { UserModel } from "./UserModel";
+import { generateUnguessableString, hash } from "../../encryption";
 import { tableNames, userColumns, refreshTokenColumns } from "../constants";
 
 export interface RefreshTokenModel extends IRefreshToken {}
@@ -40,5 +41,15 @@ export class RefreshTokenModel extends BaseModel {
         },
       },
     };
+  }
+
+  static async storeForUser(userId: number): Promise<string> {
+    await this.query().delete().where({ userId });
+    const token = generateUnguessableString();
+    await this.query().insert({
+      userId: userId,
+      token: await hash(token),
+    });
+    return token;
   }
 }

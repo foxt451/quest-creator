@@ -1,4 +1,3 @@
-import axios from "axios";
 import { errorMessages } from "../constants/messages";
 import { apiService } from "./api-service";
 
@@ -10,7 +9,7 @@ export const request = async (
     query,
     variables,
   });
-
+  
   if (
     data.data.errors &&
     Array.isArray(data.data.errors) &&

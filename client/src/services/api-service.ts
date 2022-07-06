@@ -1,12 +1,16 @@
 import axios from "axios";
-import { logout } from "../store/profile/profileSlice";
+import {
+  logout,
+  removeStaleAccessToken,
+  refreshTokens,
+} from "../store/profile/profileSlice";
 import { store } from "../store/store";
 
 const instance = axios.create({
   headers: {},
 });
 instance.interceptors.request.use(function (config) {
-  const token = localStorage.getItem("token");
+  const token = store.getState().profile.authInfo.accessToken;
   if (token) {
     config.headers!.Authorization = `Bearer ${token}`;
   }
@@ -17,9 +21,27 @@ instance.interceptors.response.use(
   function (response) {
     return response;
   },
-  function (error) {
+  async function (error) {
     if (error.response.status === 401) {
-      store.dispatch(logout());
+      store.dispatch(removeStaleAccessToken());
+      // try to refresh token and repeat request if success
+      const { refreshToken, userId } = store.getState().profile.authInfo;
+      if (refreshToken && userId) {
+        try {
+          const tokens = await store
+            .dispatch(refreshTokens({ refreshToken, userId }))
+            .unwrap();
+          if (tokens) {
+            return instance(error.config);
+          } else {
+            store.dispatch(logout());
+          }
+        } catch (e) {
+          store.dispatch(logout());
+        }
+      } else {
+        store.dispatch(logout());
+      }
     }
     return Promise.reject(error);
   }

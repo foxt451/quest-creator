@@ -8,14 +8,14 @@ import {
 import { authService } from "../services/auth-sevice";
 import { IUser } from "../interfaces/IUser";
 import { userType } from "./user";
-import { inputTypeNames } from "shared";
+import { tokensType } from "./tokens";
 
 export const authInfoType = new GraphQLObjectType({
   name: "AuthInfo",
   fields: {
-    token: {
-      type: new GraphQLNonNull(GraphQLString),
-      resolve: (parent: IUser) => authService.generateToken(parent.id),
+    tokens: {
+      type: new GraphQLNonNull(tokensType),
+      resolve: (parent: IUser) => authService.generateTokens(parent.id),
     },
     user: {
       type: new GraphQLNonNull(userType),

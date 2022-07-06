@@ -1,6 +1,6 @@
 import { BaseModel } from "./BaseModel";
 import { JSONSchema, RelationMappings } from "objection";
-import { compare } from "../encryption";
+import { compare } from "../../encryption";
 import { IUser } from "../../interfaces/IUser";
 import { QuestModel } from "./QuestModel";
 import { RefreshTokenModel } from "./RefreshTokenModel";

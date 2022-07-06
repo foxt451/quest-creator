@@ -9,6 +9,7 @@ export const endpointNames = {
   profile: {
     register: "register",
     login: "login",
+    refreshTokens: "refreshTokens",
   },
 };
 

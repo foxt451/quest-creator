@@ -7,6 +7,7 @@ const queryNames = {
 
   LOGIN_PROFILE: "LoginProfile",
   REGISTER_PROFILE: "RegisterProfile",
+  REFRESH_TOKENS: "RefreshTokens",
 } as const;
 
 export { queryNames };

@@ -1,5 +1,5 @@
 import { IUser } from "../../interfaces/IUser";
-import { hash } from "../encryption";
+import { hash } from "../../encryption";
 
 export const getSeedUsers: () => Promise<
   Readonly<Omit<IUser, "id" | "createdAt" | "updatedAt">[]>

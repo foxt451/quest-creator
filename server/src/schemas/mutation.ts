@@ -12,6 +12,7 @@ import { questType, questInputType } from "./quest";
 import { authInfoType } from "./authInfo";
 import { questService } from "../services/quest-service";
 import { authService } from "../services/auth-sevice";
+import { tokensType } from "./tokens";
 import { ownsData } from "../helpers/owns-data";
 
 export const mutationType = new GraphQLObjectType({
@@ -84,6 +85,19 @@ export const mutationType = new GraphQLObjectType({
       },
       resolve: (_, { username, email, password }) =>
         authService.register({ username, email, password }),
+    },
+    [endpointNames.profile.refreshTokens]: {
+      type: tokensType,
+      args: {
+        refreshToken: {
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        userId: {
+          type: new GraphQLNonNull(GraphQLID),
+        },
+      },
+      resolve: (_, { refreshToken, userId }) =>
+        authService.refreshTokens(Number(userId), refreshToken),
     },
   },
 });

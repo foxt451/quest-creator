@@ -1,17 +1,46 @@
 import jwt from "jsonwebtoken";
-import { hash } from "../data/encryption";
+import { hash } from "../encryption";
 import { ILoginUser, IRegisterUser } from "shared";
 import { ENV } from "../env";
 import { UserModel } from "../data/models/UserModel";
+import { RefreshTokenModel } from "../data/models/RefreshTokenModel";
 import { userColumns } from "../data/constants";
+import { compare } from "../encryption";
 import { IUser } from "../interfaces/IUser";
 
+export interface ITokenPair {
+  accessToken: string;
+  refreshToken: string;
+}
+
 export const authService = {
-  async generateToken(userId: number): Promise<string> {
-    const token = jwt.sign({ id: userId }, ENV.JWT_SECRET, {
+  async refreshTokens(
+    userId: number,
+    refreshToken: string
+  ): Promise<ITokenPair> {
+    const refreshTokenDb = await RefreshTokenModel.query()
+      .where({
+        userId,
+      })
+      .first();
+    if (!refreshTokenDb) {
+      throw new Error("Such user not found");
+    }
+    const compareResult: boolean = await compare(
+      refreshToken,
+      refreshTokenDb.token
+    );
+    if (!compareResult) {
+      throw new Error("Invalid refresh token");
+    }
+    return this.generateTokens(refreshTokenDb.userId);
+  },
+  async generateTokens(userId: number): Promise<ITokenPair> {
+    const accessToken = jwt.sign({ id: userId }, ENV.JWT_SECRET, {
       expiresIn: ENV.JWT_LIFETIME,
     });
-    return token;
+    const refreshToken = await RefreshTokenModel.storeForUser(userId);
+    return { accessToken, refreshToken };
   },
 
   async login({ email, password }: ILoginUser): Promise<IUser> {

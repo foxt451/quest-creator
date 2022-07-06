@@ -4,7 +4,7 @@ import { IRegisterUser, ILoginUser } from "shared";
 import { RootState } from "../store";
 import { queryNames } from "../../constants/graphql";
 import { endpointNames } from "shared";
-import { request } from "../../helpers/graphql";
+import { request } from "../../services/graphql";
 import { apiUrl } from "../../env/env";
 
 interface ProfileState {
@@ -65,12 +65,14 @@ export const register = createAsyncThunk<ProfileState, IRegisterUser>(
   }
 );
 
+const TOKEN_ITEM_NAME = "token";
 export const profileSlice = createSlice({
   name: "profile",
   initialState,
   reducers: {
     logout(state) {
       state.token = null;
+      localStorage.removeItem(TOKEN_ITEM_NAME);
       state.user = null;
     },
   },
@@ -79,6 +81,9 @@ export const profileSlice = createSlice({
       isAnyOf(login.fulfilled, register.fulfilled),
       (state, action) => {
         state.token = action.payload.token;
+        if (state.token) {
+          localStorage.setItem(TOKEN_ITEM_NAME, state.token);
+        }
         state.user = action.payload.user;
       }
     );

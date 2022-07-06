@@ -12,12 +12,13 @@ import { questType, questInputType } from "./quest";
 import { authInfoType } from "./authInfo";
 import { questService } from "../services/quest-service";
 import { authService } from "../services/auth-sevice";
+import { ownsData } from "../helpers/owns-data";
 
 export const mutationType = new GraphQLObjectType({
   name: "Mutation",
   fields: {
     [endpointNames.quests.add]: {
-      type: new GraphQLNonNull(questType),
+      type: questType,
       args: {
         data: {
           type: new GraphQLNonNull(questInputType),
@@ -32,8 +33,12 @@ export const mutationType = new GraphQLObjectType({
           type: new GraphQLNonNull(GraphQLID),
         },
       },
-      type: new GraphQLNonNull(GraphQLInt),
-      resolve: (_, { id }) => questService.deleteQuest(Number(id)),
+      type: GraphQLInt,
+      resolve: async (_, { id }, ctx) => {
+        const ownerId = await questService.getOwnerId(Number(id));
+        ownsData(ownerId, ctx.user?.id);
+        return questService.deleteQuest(Number(id));
+      },
     },
     [endpointNames.quests.update]: {
       args: {
@@ -44,11 +49,15 @@ export const mutationType = new GraphQLObjectType({
           type: new GraphQLNonNull(questInputType),
         },
       },
-      type: new GraphQLNonNull(questType),
-      resolve: (_, { id, data }) => questService.updateQuest(Number(id), data),
+      type: questType,
+      resolve: async (_, { id, data }, ctx) => {
+        const ownerId = await questService.getOwnerId(Number(id));
+        ownsData(ownerId, ctx.user?.id);
+        return questService.updateQuest(Number(id), data);
+      },
     },
     [endpointNames.profile.login]: {
-      type: new GraphQLNonNull(authInfoType),
+      type: authInfoType,
       args: {
         email: {
           type: new GraphQLNonNull(GraphQLString),
@@ -61,7 +70,7 @@ export const mutationType = new GraphQLObjectType({
         authService.login({ email, password }),
     },
     [endpointNames.profile.register]: {
-      type: new GraphQLNonNull(authInfoType),
+      type: authInfoType,
       args: {
         username: {
           type: new GraphQLNonNull(GraphQLString),

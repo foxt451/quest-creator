@@ -3,7 +3,7 @@ import { IQuestUpdate } from "../../interfaces/IQuestUpdate";
 import { RootState } from "../store";
 import { queryNames } from "../../constants/graphql";
 import { inputTypeNames, endpointNames } from "shared";
-import { request } from "../../helpers/graphql";
+import { request } from "../../services/graphql";
 import { apiUrl } from "../../env/env";
 import { FormValues } from "../../components/QuestForm/QuestForm";
 import {

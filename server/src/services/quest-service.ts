@@ -3,6 +3,12 @@ import { QuestModel } from "../data/models/QuestModel";
 import { questColumns } from "../data/constants";
 
 export const questService = {
+  getOwnerId: async (questId: number): Promise<number | undefined> => {
+    const quest = await QuestModel.query()
+      .where(questColumns.id, questId)
+      .first();
+    return quest?.userId;
+  },
   getQuests: async (): Promise<IQuest[]> => {
     return QuestModel.query();
   },

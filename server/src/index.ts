@@ -16,10 +16,17 @@ const app = express();
 app.use(cors());
 
 app.use(
+  expressjwt({
+    secret: ENV.JWT_SECRET,
+    algorithms: ["HS256"],
+    credentialsRequired: false,
+  })
+);
+app.use(
   "/graphql",
   graphqlHTTP({
     schema: schema,
-    graphiql: ENV.DEBUG,
+    graphiql: ENV.DEBUG
   })
 );
 

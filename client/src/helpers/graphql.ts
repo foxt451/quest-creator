@@ -21,11 +21,7 @@ export const request = async <TResult>(
 export const handleGraphQLResponse = <TResult>(
   response: GraphQLResponseRoot<TResult>
 ): TResult => {
-  if (response.errors) {
-    throw new Error("sd");
-  }
-  // if no data property in response, throw error
-  if (response.data === undefined) {
+  if (response.errors || response.data === undefined) {
     throw new Error(errorMessages.default);
   }
 

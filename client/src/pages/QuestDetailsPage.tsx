@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import QuestDetails from "../components/QuestDetails/QuestDetails";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
 import { pathParameters } from "../constants/paths";
@@ -35,7 +35,7 @@ const QuestDetailsPage: FC = () => {
       dispatch(loadQuest(questId));
     }
   }, [dispatch, questStatus, questId, designated]);
-  let questComponent = null;
+  let questComponent: ReactNode = null;
   if (questStatus === "loading") questComponent = <div>Loading...</div>;
   else if (questStatus === "failed") {
     questComponent = (
@@ -44,10 +44,12 @@ const QuestDetailsPage: FC = () => {
   } else if (questStatus === "loaded") {
     questComponent = <QuestDetails questId={questId} />;
   }
-  return <>
-  {questComponent}
-  <NavLink to={`${paths.QUESTS}`}>Back to all quests</NavLink>
-  </>;
+  return (
+    <>
+      {questComponent}
+      <NavLink to={`${paths.QUESTS}`}>Back to all quests</NavLink>
+    </>
+  );
 };
 
 export default QuestDetailsPage;

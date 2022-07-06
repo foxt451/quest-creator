@@ -1,7 +1,7 @@
 import axios from "axios";
 import {
   logout,
-  removeStaleAccessToken,
+  removeAccessToken,
   refreshTokens,
 } from "../store/profile/profileSlice";
 import { store } from "../store/store";
@@ -23,7 +23,7 @@ instance.interceptors.response.use(
   },
   async function (error) {
     if (error.response.status === 401) {
-      store.dispatch(removeStaleAccessToken());
+      store.dispatch(removeAccessToken());
       // try to refresh token and repeat request if success
       const { refreshToken, userId } = store.getState().profile.authInfo;
       if (refreshToken && userId) {

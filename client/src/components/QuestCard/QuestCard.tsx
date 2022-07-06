@@ -24,18 +24,19 @@ const getDifficultyColor = (difficulty: QuestDifficulty) => {
 };
 
 const MAX_VISIBLE_DESCRIPTION_LENGTH = 150;
+const MAX_VISIBLE_NAME_LENGTH = 15;
 
 const QuestCard: FC<{ questId: EntityId }> = ({ questId }) => {
   const quest = useAppSelector((state) => selectQuestById(state, questId));
   if (!quest) return null;
   const otherInfoComponent = (
-        <>
-          <Chip
-            icon={<FaClock />}
-            label={quest.duration === null ? '>24 h' : `~${quest.duration} min`}
-            variant="outlined"
-          />
-        </>
+    <>
+      <Chip
+        icon={<FaClock />}
+        label={quest.duration === null ? ">24 h" : `~${quest.duration} min`}
+        variant="outlined"
+      />
+    </>
   );
   return (
     <Paper elevation={2} sx={{ height: "100%", width: "100%" }}>
@@ -51,14 +52,17 @@ const QuestCard: FC<{ questId: EntityId }> = ({ questId }) => {
             {quest.name}
           </Typography>
         </NavLink>
+        <Typography variant="subtitle2" component="p" marginTop={2}>
+          by {cutText(quest.user.username, MAX_VISIBLE_NAME_LENGTH)}
+        </Typography>
         <Typography variant="subtitle1" component="p" marginTop={2}>
           {cutText(quest.description, MAX_VISIBLE_DESCRIPTION_LENGTH)}
         </Typography>
 
-          <>
-            <Divider sx={{ margin: "1rem" }}>Other Info</Divider>
-            <Box>{otherInfoComponent}</Box>
-          </>
+        <>
+          <Divider sx={{ margin: "1rem" }}>Other Info</Divider>
+          <Box>{otherInfoComponent}</Box>
+        </>
         <Chip
           sx={{ marginTop: "auto", alignSelf: "center" }}
           label={quest.difficulty}

@@ -9,7 +9,7 @@ import { EntityId } from "@reduxjs/toolkit";
 import ErrorBox from "./ErrorBox";
 import { errorMessages } from "../constants/messages";
 import QuestForm, { FormValues } from "./QuestForm/QuestForm";
-import { IQuestUpdate } from "../interfaces/IQuestUpdate";
+import { QuestUpdate } from "../interfaces/IQuestUpdate";
 
 const QuestUpdateForm: FC<{ questId: EntityId }> = ({ questId }) => {
   const dispatch = useAppDispatch();
@@ -31,12 +31,12 @@ const QuestUpdateForm: FC<{ questId: EntityId }> = ({ questId }) => {
         ...data,
       };
 
-      const questRestricted: IQuestUpdate = {
+      const questRestricted: QuestUpdate = {
         name: questNew.name,
         duration: questNew.duration,
         difficulty: questNew.difficulty,
         description: questNew.description,
-        image: questNew.image
+        image: questNew.image,
       };
 
       const updatedQuest = await dispatch(

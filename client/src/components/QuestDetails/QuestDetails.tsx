@@ -6,11 +6,13 @@ import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { paths } from "../../constants/paths";
 import { selectQuestById, deleteQuest } from "../../store/quests/questsSlice";
+import { selectUser } from "../../store/profile/profileSlice";
 import { Box, Typography, Divider, Fab } from "@mui/material";
 
 import styles from "./styles.module.scss";
 
 const QuestDetails: FC<{ questId: EntityId }> = ({ questId }) => {
+  const user = useAppSelector(selectUser);
   const quest = useAppSelector((state) => selectQuestById(state, questId));
   const navigate = useNavigate();
 
@@ -28,7 +30,6 @@ const QuestDetails: FC<{ questId: EntityId }> = ({ questId }) => {
       setDeleting(false);
     }
   };
-  
 
   if (!quest) return null;
   if (deleting) return <>Loading...</>;
@@ -46,16 +47,18 @@ const QuestDetails: FC<{ questId: EntityId }> = ({ questId }) => {
       <Typography variant="subtitle1" component="p">
         {quest.description}
       </Typography>
-      <Box>
-        <NavLink to={`${paths.QUESTS}/${questId}${paths.UPDATE}`}>
-          <Fab color="primary" aria-label="create">
-            <FaEdit />
+      {user?.id === quest.user.id && (
+        <Box>
+          <NavLink to={`${paths.QUESTS}/${questId}${paths.UPDATE}`}>
+            <Fab color="primary" aria-label="create">
+              <FaEdit />
+            </Fab>
+          </NavLink>
+          <Fab color="error" aria-label="delete" onClick={onDeleteClick}>
+            <FaTrash />
           </Fab>
-        </NavLink>
-        <Fab color="error" aria-label="delete" onClick={onDeleteClick}>
-          <FaTrash />
-        </Fab>
-      </Box>
+        </Box>
+      )}
     </Box>
   );
 };

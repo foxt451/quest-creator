@@ -6,6 +6,8 @@ import {
   GraphQLInt,
 } from "graphql";
 import { inputTypeNames } from "shared";
+import { userType } from "./user";
+import { userService } from "../services/user-service";
 import { IQuest } from "../interfaces/IQuest";
 
 export const questType = new GraphQLObjectType({
@@ -30,9 +32,9 @@ export const questType = new GraphQLObjectType({
     duration: {
       type: GraphQLInt,
     },
-    userId: {
-      type: new GraphQLNonNull(GraphQLString),
-      resolve: (parent: IQuest) => parent.userId.toString(),
+    user: {
+      type: new GraphQLNonNull(userType),
+      resolve: (parent: IQuest) => userService.getById(parent.userId),
     },
     createdAt: {
       type: new GraphQLNonNull(GraphQLString),

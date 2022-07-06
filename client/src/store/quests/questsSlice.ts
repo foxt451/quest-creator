@@ -1,5 +1,5 @@
 import { IQuest } from "../../interfaces/IQuest";
-import { IQuestUpdate } from "../../interfaces/IQuestUpdate";
+import { QuestUpdate } from "../../interfaces/IQuestUpdate";
 import { RootState } from "../store";
 import { queryNames } from "../../constants/graphql";
 import { inputTypeNames, endpointNames } from "shared";
@@ -30,7 +30,10 @@ const QUESTS_QUERY = `
       duration,
       createdAt,
       updatedAt,
-      userId
+      user {
+        id,
+        username
+      }
     }
   }
 `;
@@ -57,7 +60,10 @@ const QUEST_QUERY = `
       duration,
       createdAt,
       updatedAt,
-      userId
+      user {
+        id,
+        username
+      }
     }
   }
 `;
@@ -94,7 +100,10 @@ const QUEST_ADD_QUERY = `
       duration,
       createdAt,
       updatedAt,
-      userId
+      user {
+        id,
+        username,
+      }
     }
   }
 `;
@@ -122,14 +131,17 @@ const QUEST_UPDATE_QUERY = `
       duration,
       createdAt,
       updatedAt,
-      userId
+      user {
+        id,
+        username,
+      }
     }
   }
 `;
 
 export const updateQuest = createAsyncThunk<
   IQuest,
-  { id: EntityId; data: IQuestUpdate }
+  { id: EntityId; data: QuestUpdate }
 >("quests/updateQuest", async ({ id, data }) => {
   const response = await request(apiUrl, {
     query: QUEST_UPDATE_QUERY,

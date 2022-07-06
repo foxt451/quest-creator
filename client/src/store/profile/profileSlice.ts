@@ -12,13 +12,20 @@ interface ProfileState {
   authInfo: AuthInfo;
 }
 
+interface AuthInfo {
+  accessToken: string | null;
+  refreshToken: string | null;
+  userId: string | null;
+}
+
+const initialAuthInfo = {
+  accessToken: null,
+  refreshToken: null,
+  userId: null,
+};
 const initialState: ProfileState = {
   user: null,
-  authInfo: {
-    accessToken: null,
-    refreshToken: null,
-    userId: null,
-  },
+  authInfo: initialAuthInfo,
 };
 
 const LOGIN_QUERY = `
@@ -106,8 +113,8 @@ const refreshQuery = `
 `;
 export const refreshTokens = createAsyncThunk<
   {
-    accessToken: null;
-    refreshToken: null;
+    accessToken: string;
+    refreshToken: string;
   },
   { refreshToken: string; userId: string }
 >("profile/refreshTokens", async ({ refreshToken, userId }) => {
@@ -121,33 +128,6 @@ export const refreshTokens = createAsyncThunk<
   return response.data.data[endpointNames.profile.refreshTokens];
 });
 
-interface AuthInfo {
-  accessToken: string | null;
-  refreshToken: string | null;
-  userId: string | null;
-}
-
-const AUTH_INFO_ITEM_NAME = "authInfo";
-const saveAuthInfo = (authInfo: AuthInfo): void => {
-  localStorage.setItem(AUTH_INFO_ITEM_NAME, JSON.stringify(authInfo));
-};
-
-const retrieveAuthInfo = (): AuthInfo => {
-  const authInfo = localStorage.getItem(AUTH_INFO_ITEM_NAME);
-  if (!authInfo) {
-    return {
-      accessToken: null,
-      refreshToken: null,
-      userId: null,
-    };
-  }
-  return JSON.parse(authInfo);
-};
-
-const deleteAuthInfo = (): void => {
-  localStorage.removeItem(AUTH_INFO_ITEM_NAME);
-};
-
 export const profileSlice = createSlice({
   name: "profile",
   initialState,
@@ -155,23 +135,19 @@ export const profileSlice = createSlice({
     logout(state) {
       state.authInfo = { accessToken: null, refreshToken: null, userId: null };
       state.user = null;
-      deleteAuthInfo();
     },
-    removeStaleAccessToken(state) {
+    removeAccessToken(state) {
       state.authInfo.accessToken = null;
-      saveAuthInfo(state.authInfo);
     },
   },
   extraReducers(builder) {
     builder.addCase(refreshTokens.fulfilled, (state, action) => {
       state.authInfo.accessToken = action.payload.accessToken;
       state.authInfo.refreshToken = action.payload.refreshToken;
-      saveAuthInfo(state.authInfo);
     });
     builder.addMatcher(
       isAnyOf(login.fulfilled, register.fulfilled),
       (state, action) => {
-        saveAuthInfo(action.payload.authInfo);
         return action.payload;
       }
     );
@@ -180,5 +156,6 @@ export const profileSlice = createSlice({
 
 // selector for selecting user
 export const selectUser = (state: RootState) => state.profile.user;
-export const { logout, removeStaleAccessToken } = profileSlice.actions;
+export const { logout, removeAccessToken } =
+  profileSlice.actions;
 export default profileSlice.reducer;

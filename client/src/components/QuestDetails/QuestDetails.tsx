@@ -5,7 +5,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { paths } from "../../constants/paths";
-import { defaultImages } from "../../constants/defaultImages";
+import { defaultImages } from "../../constants/images";
 import { selectQuestById, deleteQuest } from "../../store/quests/questsSlice";
 import { selectUser } from "../../store/profile/profileSlice";
 import { Box, Typography, Divider, Fab } from "@mui/material";

@@ -1,4 +1,4 @@
-import { IBaseModel as IBase } from "shared/dist/types/IBaseModel";
+import { IBaseModel as IBase } from "shared/dist/types/BaseModel";
 
 export interface IBaseModel extends IBase {
   id: number;

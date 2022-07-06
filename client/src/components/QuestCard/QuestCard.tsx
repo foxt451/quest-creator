@@ -7,7 +7,7 @@ import { selectQuestById } from "../../store/quests/questsSlice";
 import { cutText } from "../../helpers";
 import { FaClock } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import { defaultImages } from "../../constants/defaultImages";
+import { defaultImages } from "../../constants/images";
 import { paths } from "../../constants/paths";
 import styles from "./styles.module.scss";
 

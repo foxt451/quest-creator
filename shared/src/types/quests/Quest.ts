@@ -1,10 +1,10 @@
-import { questDifficulties } from "../enums/questDifficulties";
-import { IBaseModel } from "./IBaseModel";
+import { questDifficulties } from "../../enums/questDifficulties";
+import { BaseModel } from "../BaseModel";
 
 export type QuestDifficulty =
   typeof questDifficulties[keyof typeof questDifficulties];
 
-export interface IQuest extends IBaseModel {
+export interface Quest extends BaseModel {
   name: string;
   description: string;
   image: string | null;

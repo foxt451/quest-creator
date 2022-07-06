@@ -6,6 +6,7 @@ export const validationConstants = {
     },
     password: {
       MIN_LENGTH: 6,
+      MAX_LENGTH: 100,
     },
   },
   quest: {

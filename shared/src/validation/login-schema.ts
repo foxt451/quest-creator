@@ -1,9 +1,7 @@
 import yup, { SchemaOf } from "yup";
-import { ILoginUser } from "../types";
-import { validationConstants } from "./constants";
-const userConstants = validationConstants.user;
+import { LoginUser } from "../types";
 
-export const registerSchema: SchemaOf<ILoginUser> = yup.object().shape({
+export const loginSchema: SchemaOf<LoginUser> = yup.object().shape({
   email: yup.string().email().required(),
-  password: yup.string().min(userConstants.password.MIN_LENGTH).required(),
+  password: yup.string().required(),
 });

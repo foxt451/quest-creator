@@ -14,14 +14,8 @@ import {
   MenuItem,
 } from "@mui/material";
 import { questDifficulties } from "shared";
-import styles from "../common-styles.module.scss";
+import styles from "../form-styles.module.scss";
 
-export type FormValues = Pick<
-  IQuest,
-  "name" | "duration" | "difficulty" | "description" | "image"
->;
-
-// TODO: implement image upload
 const QuestForm: FC<{
   initialValues: FormValues;
   onSubmit: SubmitHandler<FormValues>;

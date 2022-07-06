@@ -1,5 +1,5 @@
 import useFetch from "./useFetch";
-import { apiUrl } from "../env/env";
+import { ENV } from "../env/env";
 import { GQLRequestBody } from "../types/fetching/GQLRequestBody";
 import { errorMessages } from "../constants/messages";
 import { GraphQLResponseRoot } from "../types/fetching/GQLResponse";
@@ -7,7 +7,7 @@ import { handleGraphQLResponse } from "../helpers/graphql";
 import { LoadingHookResult } from "../types/fetching/LoadingHookResult";
 
 const useGQLFetch = <TResult>(
-  { url = apiUrl, body }: { url?: string; body: GQLRequestBody },
+  { url = ENV.API_URL, body }: { url?: string; body: GQLRequestBody },
   deps: unknown[]
 ): LoadingHookResult<TResult> => {
   const {

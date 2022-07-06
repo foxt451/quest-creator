@@ -1,4 +1,4 @@
-export interface IBaseModel {
+export interface BaseModel {
   createdAt: string;
   updatedAt: string;
 }

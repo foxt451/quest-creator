@@ -40,13 +40,14 @@ const UpdateQuestPage: FC = () => {
     questComponent = <div>Loading...</div>;
   else if (questStatus === "failed") {
     questComponent = <ErrorBox message={`${questError}`} />;
-  } else if (error) {
-    questComponent = <ErrorBox message={`${error}`} />;
   } else if (!quest) {
     navigate(`${paths.QUESTS}`);
   } else if (questStatus === "loaded") {
     questComponent = (
-      <QuestUpdateForm questData={quest} onSubmit={handleQuestSubmit} />
+      <>
+        {error && <ErrorBox message={`${error}`} />}
+        <QuestUpdateForm questData={quest} onSubmit={handleQuestSubmit} />
+      </>
     );
   }
   return questComponent;

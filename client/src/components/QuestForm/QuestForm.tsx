@@ -14,7 +14,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { questDifficulties } from "shared";
-import styles from "../form-styles.module.scss";
+import styles from "../common-styles/form-styles.module.scss";
 
 const QuestForm: FC<{
   initialValues: QuestData;

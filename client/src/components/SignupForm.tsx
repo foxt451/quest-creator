@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { TextField, Button } from "@mui/material";
 import { RegisterUser } from "shared";
 
-import styles from "./form-styles.module.scss";
+import styles from "./common-stylesform-styles.module.scss";
 
 interface FormValues extends RegisterUser {
   repeatPassword: string;

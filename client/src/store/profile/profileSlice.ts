@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, isAnyOf } from "@reduxjs/toolkit";
-import { IUserInfo } from "../../types/IUserInfo";
+import { UserInfo } from "../../types/UserInfo";
 import { IRegisterUser, ILoginUser } from "shared";
 import { RootState } from "../store";
 import { queryNames } from "../../constants/graphql";
@@ -8,7 +8,7 @@ import { request } from "../../helpers/graphql";
 import { apiUrl } from "../../env/env";
 
 interface ProfileState {
-  user: IUserInfo | null;
+  user: UserInfo | null;
   authInfo: AuthInfo;
 }
 

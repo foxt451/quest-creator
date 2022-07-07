@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { IQuest } from "../../types/models/IQuest";
+import { QuestData } from "shared";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import {
   TextField,
@@ -17,26 +17,26 @@ import { questDifficulties } from "shared";
 import styles from "../form-styles.module.scss";
 
 const QuestForm: FC<{
-  initialValues: FormValues;
-  onSubmit: SubmitHandler<FormValues>;
+  initialValues: QuestData;
+  onSubmit: SubmitHandler<QuestData>;
 }> = ({ initialValues, onSubmit }) => {
   const {
     register,
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<QuestData>({
     defaultValues: initialValues,
   });
   const [durationMore, setDurationMore] = useState(
     initialValues.duration === null
   );
 
-  const onMoreSwitchChange = (e: unknown, checked: boolean) => {
+  const onMoreSwitchChange = (_: unknown, checked: boolean) => {
     setDurationMore(checked);
   };
 
-  const handleFormSubmit: SubmitHandler<FormValues> = (data) => {
+  const handleFormSubmit: SubmitHandler<QuestData> = (data) => {
     const finalData = {
       ...data,
       duration: durationMore ? null : (data.duration ?? 0) * 60,
@@ -51,7 +51,6 @@ const QuestForm: FC<{
         error={Boolean(errors.name)}
         helperText={errors.name?.message}
         {...register("name", { required: "Please enter a title" })}
-        margin="normal"
       />
       <Controller
         name="description"
@@ -65,7 +64,6 @@ const QuestForm: FC<{
             error={Boolean(errors.description)}
             helperText={errors.description?.message}
             {...field}
-            margin="normal"
           />
         )}
       />
@@ -74,7 +72,6 @@ const QuestForm: FC<{
         error={Boolean(errors.image)}
         helperText={errors.image?.message}
         {...register("image")}
-        margin="normal"
       />
       <Typography variant="h6" component="p">
         Approximate duration (in hours)
@@ -104,7 +101,7 @@ const QuestForm: FC<{
         onChange={onMoreSwitchChange}
         label="> 24 hours"
       />
-      <FormControl sx={{ margin: "2rem" }}>
+      <FormControl>
         <InputLabel id="difficulty-select-label">Difficulty</InputLabel>
         <Controller
           render={({ field: { onChange, value } }) => (

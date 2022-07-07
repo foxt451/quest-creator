@@ -1,10 +1,11 @@
-import { IQuest } from "../../types/models/IQuest";
+import { Quest } from "../../types/models/Quest";
 import { QuestUpdate } from "../../types/IQuestUpdate";
 import { RootState } from "../store";
 import { queryNames } from "../../constants/graphql";
 import { inputTypeNames, endpointNames } from "shared";
 import { request } from "../../helpers/graphql";
-import { apiUrl } from "../../env/env";
+import { ErrorState } from "../../types/fetching/ErrorState";
+import { ENV } from "../../env/env";
 import { FormValues } from "../../components/QuestForm/QuestForm";
 import {
   createSlice,
@@ -14,7 +15,7 @@ import {
   EntityId,
 } from "@reduxjs/toolkit";
 
-const questsAdapter = createEntityAdapter<IQuest>({
+const questsAdapter = createEntityAdapter<Quest>({
   sortComparer: (a, b) =>
     a.createdAt < b.createdAt ? -1 : a.createdAt > b.createdAt ? 1 : 0,
 });
@@ -35,14 +36,14 @@ user {
 `;
 
 const QUESTS_QUERY = `
-  query ${queryNames.QUESTS} {
+  query ${queryNames.quests.ALL} {
     ${endpointNames.quests.all} {
       ${QUEST_DEFAULT_FIELDS}
     }
   }
 `;
 
-export const loadQuests = createAsyncThunk<IQuest[]>(
+export const loadQuests = createAsyncThunk<Quest[]>(
   "quests/loadQuests",
   async () => {
     const response = await request(apiUrl, {
@@ -138,14 +139,14 @@ export const deleteQuest = createAsyncThunk<EntityId, EntityId>(
   }
 );
 
-type LoadingStatus = "initial" | "loading" | "failed" | "loaded";
+export type LoadingStatus = "initial" | "loading" | "failed" | "loaded";
 
 export interface QuestsAdditionalState {
-  questsPage: { ids: EntityId[]; status: LoadingStatus; error: string | null };
+  questsPage: { ids: EntityId[]; status: LoadingStatus; error: ErrorState };
   selectedQuest: {
     id: EntityId | null;
     status: LoadingStatus;
-    error: string | null;
+    error: ErrorState;
   };
 }
 
@@ -153,12 +154,12 @@ const initialState = questsAdapter.getInitialState<QuestsAdditionalState>({
   questsPage: {
     ids: [],
     status: "initial",
-    error: null,
+    error: false,
   },
   selectedQuest: {
     id: null,
     status: "initial",
-    error: null,
+    error: false,
   },
 });
 
@@ -176,11 +177,11 @@ export const questsSlice = createSlice({
       state.selectedQuest.id = action.payload;
       if (state.ids.includes(action.payload)) {
         state.selectedQuest.status = "loaded";
-        state.selectedQuest.error = null;
+        state.selectedQuest.error = false;
 
         return;
       }
-      state.selectedQuest.error = null;
+      state.selectedQuest.error = false;
       state.selectedQuest.status = "initial";
     },
   },
@@ -197,7 +198,7 @@ export const questsSlice = createSlice({
       }
     );
     builder.addCase(loadQuests.rejected, (state, action) => {
-      state.questsPage.error = action.error.message ?? null;
+      state.questsPage.error = action.error.message ?? false;
       state.questsPage.status = "failed";
     });
 
@@ -212,7 +213,7 @@ export const questsSlice = createSlice({
       }
     );
     builder.addCase(loadQuest.rejected, (state, action) => {
-      state.selectedQuest.error = action.error.message ?? null;
+      state.selectedQuest.error = action.error.message ?? false;
       state.selectedQuest.status = "failed";
     });
 
@@ -222,7 +223,7 @@ export const questsSlice = createSlice({
         console.log(action.payload);
         questsAdapter.upsertOne(state, action.payload);
         state.questsPage = {
-          error: null,
+          error: false,
           ids: [],
           status: "initial",
         };

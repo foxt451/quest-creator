@@ -1,11 +1,11 @@
 import React, { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { TextField, Button } from "@mui/material";
-import { IRegisterUser } from "shared";
+import { RegisterUser } from "shared";
 
 import styles from "./form-styles.module.scss";
 
-interface FormValues extends IRegisterUser {
+interface FormValues extends RegisterUser {
   repeatPassword: string;
 }
 
@@ -17,13 +17,13 @@ const defaultData: FormValues = {
 };
 
 const SignupForm: FC<{
-  submitHandler: (registerData: IRegisterUser) => unknown;
+  submitHandler: SubmitHandler<RegisterUser>;
 }> = ({ submitHandler }) => {
   const { register, handleSubmit } = useForm<FormValues>({
     defaultValues: defaultData,
   });
   const onFormSubmit: SubmitHandler<FormValues> = (data) => {
-    const { username, email, password } = data;
+    const { username, email, password }: RegisterUser = data;
     submitHandler({ username, email, password });
   };
   return (

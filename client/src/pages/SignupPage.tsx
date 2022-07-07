@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import SignupForm from "../components/SignupForm";
 import ErrorBox from "../components/ErrorBox";
 import { useNavigate } from "react-router-dom";
-import { IRegisterUser } from "shared";
+import { RegisterUser } from "shared";
 import { useAppDispatch } from "../store/hooks";
 import { errorMessages } from "../constants/messages";
 import { register as registerAction } from "../store/profile/profileSlice";
@@ -13,7 +13,7 @@ const SignupPage: FC = () => {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | false>(false);
 
-  const handleFormSubmit = async (data: IRegisterUser) => {
+  const handleFormSubmit = async (data: RegisterUser) => {
     setLoading(true);
     try {
       await dispatch(registerAction(data)).unwrap();

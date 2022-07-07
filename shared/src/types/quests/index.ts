@@ -1,2 +1,2 @@
 export * from "./Quest";
-export * from "./QuestUpdate";
+export * from "./QuestData";

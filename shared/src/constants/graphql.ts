@@ -5,14 +5,14 @@ export const endpointNames = {
     add: "addQuest",
     update: "updateQuest",
     delete: "deleteQuest",
-  },
+  } as const,
   profile: {
     register: "register",
     login: "login",
     refreshTokens: "refreshTokens",
-  },
-};
+  } as const,
+} as const;
 
 export const inputTypeNames = {
   QUEST_DATA: "QuestData",
-};
+} as const;

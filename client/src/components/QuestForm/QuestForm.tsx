@@ -13,7 +13,8 @@ import {
   InputLabel,
   MenuItem,
 } from "@mui/material";
-import { questDifficulties } from "shared";
+import { questDifficulties, questSchema } from "shared";
+import { yupResolver } from "@hookform/resolvers/yup";
 import styles from "../common-styles/form-styles.module.scss";
 
 const QuestForm: FC<{
@@ -30,6 +31,7 @@ const QuestForm: FC<{
       ...initialValues,
       duration: initialValues.duration ? initialValues.duration / 60 : 0,
     },
+    resolver: yupResolver(questSchema),
   });
   const [durationMore, setDurationMore] = useState(
     initialValues.duration === null

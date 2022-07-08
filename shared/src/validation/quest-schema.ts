@@ -10,7 +10,7 @@ export const questSchema: SchemaOf<QuestData> = yup
   .shape({
     name: yup
       .string()
-      .matches(/^[a-z0-9]+$/i, { message: "Title must be alphanumeric" })
+      .matches(/^[a-z0-9 ]+$/i, { message: "Title must be alphanumeric (possible spaces)" })
       .required()
       .max(questuserConstants.name.MAX_LENGTH)
       .min(questuserConstants.name.MIN_LENGTH)
@@ -23,6 +23,6 @@ export const questSchema: SchemaOf<QuestData> = yup
       .trim(),
     difficulty: yup.string().oneOf(Object.values(questDifficulties)).required(),
     image: yup.string().url().defined().nullable(true),
-    duration: yup.number().positive().defined().nullable(true),
+    duration: yup.number().min(0).defined().nullable(true),
   })
   .required();

@@ -4,7 +4,6 @@ import ErrorBox from "../components/ErrorBox";
 import { useNavigate } from "react-router-dom";
 import { RegisterUser } from "shared";
 import { useAppDispatch } from "../store/hooks";
-import { errorMessages } from "../constants/messages";
 import { register as registerAction } from "../store/profile/thunks";
 import { getMessageOfCaughtError } from "../helpers/errors";
 

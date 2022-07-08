@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { LoginUser } from "shared";
 import ErrorBox from "../components/ErrorBox";
 import LoginForm from "../components/LoginForm";
-import { errorMessages } from "../constants/messages";
 import { getMessageOfCaughtError } from "../helpers/errors";
 import { useAppDispatch } from "../store/hooks";
 import { login } from "../store/profile/thunks";

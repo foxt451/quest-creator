@@ -1,7 +1,6 @@
 import useFetch from "./useFetch";
 import { ENV } from "../env/env";
 import { GQLRequestBody } from "../types/fetching/GQLRequestBody";
-import { errorMessages } from "../constants/messages";
 import { GraphQLResponseRoot } from "../types/fetching/GQLResponse";
 import { handleGraphQLResponse } from "../helpers/graphql";
 import { LoadingHookResult } from "../types/fetching/LoadingHookResult";

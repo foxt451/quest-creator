@@ -3,7 +3,6 @@ import { ErrorState } from "../types/fetching/ErrorState";
 import { RequestConfig } from "../types/fetching/RequestConfig";
 import { LoadingHookResult } from "../types/fetching/LoadingHookResult";
 import { apiService } from "../services/api-service/api-service";
-import { errorMessages } from "../constants/messages";
 import { getMessageOfCaughtError } from "../helpers/errors";
 
 const useFetch = <TResult, TData>(

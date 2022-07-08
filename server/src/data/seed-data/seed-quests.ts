@@ -1,4 +1,4 @@
-import { IQuest } from "../../types/IQuest";
+import { Quest } from "../../types";
 
 const getRandom = (upperId: number, lowerId: number) => {
   return Math.floor(Math.random() * (upperId - lowerId + 1)) + lowerId;
@@ -7,7 +7,7 @@ const getRandom = (upperId: number, lowerId: number) => {
 export const getSeedQuests: (
   upperUserId: number,
   lowerUserId: number
-) => Readonly<Omit<IQuest, "id" | "createdAt" | "updatedAt">[]> = (
+) => Readonly<Omit<Quest, "id" | "createdAt" | "updatedAt">[]> = (
   upperUserId: number,
   lowerUserId: number
 ) => [

@@ -1,25 +1,17 @@
-import {
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLNonNull,
-  GraphQLInputObjectType,
-  GraphQLInt,
-} from "graphql";
-import { authService } from "../services/auth-sevice";
-import { IUser } from "../types/IUser";
-import { userType } from "./user";
-import { ITokenPair } from "../services/auth-sevice";
+import { GraphQLObjectType, GraphQLString, GraphQLNonNull } from "graphql";
+import { TokenPair } from "../services/auth-sevice";
+import { Context } from "../types";
 
-export const tokensType = new GraphQLObjectType({
+export const tokensType = new GraphQLObjectType<TokenPair, Context>({
   name: "Tokens",
   fields: {
     accessToken: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: (parent: ITokenPair) => parent.accessToken,
+      resolve: (parent) => parent.accessToken,
     },
     refreshToken: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: (parent: ITokenPair) => parent.refreshToken,
+      resolve: (parent) => parent.refreshToken,
     },
   },
 });

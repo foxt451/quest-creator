@@ -1,8 +1,8 @@
-import { IUser } from "../../types/IUser";
+import { User } from "../../types";
 import { hash } from "../../encryption";
 
 export const getSeedUsers: () => Promise<
-  Readonly<Omit<IUser, "id" | "createdAt" | "updatedAt">[]>
+  Readonly<Omit<User, "id" | "createdAt" | "updatedAt">[]>
 > = async () => [
   {
     username: "alex",

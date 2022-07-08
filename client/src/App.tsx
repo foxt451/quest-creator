@@ -14,7 +14,6 @@ import NavBar from "./components/NavBar/NavBar";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useAppSelector } from "./store/hooks";
 import { selectUser } from "./store/profile/profileSlice";
-import "./App.css";
 
 function App() {
   const user = useAppSelector(selectUser);

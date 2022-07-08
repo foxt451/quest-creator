@@ -7,6 +7,7 @@ export async function seed(knex: Knex): Promise<void> {
   try {
     await knex.transaction(async (trx) => {
       await trx(tableNames.QUESTS).truncate();
+      await trx(tableNames.REFRESH_TOKENS).truncate();
       await trx(tableNames.USERS).del();
       // Inserts seed entries
       await trx(tableNames.USERS).insert(await getSeedUsers());

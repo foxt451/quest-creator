@@ -1,12 +1,12 @@
 import React, { FC, ReactNode } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { paths } from "../constants/paths";
-import { UserInfo } from "../types/models/UserInfo";
+import { ProfileUserInfo } from "../store/profile/profileSlice";
 
-const ProtectedRoute: FC<{ user: UserInfo | null; children?: ReactNode }> = ({
-  user,
-  children,
-}) => {
+const ProtectedRoute: FC<{
+  user: ProfileUserInfo | null;
+  children?: ReactNode;
+}> = ({ user, children }) => {
   if (!user) {
     return <Navigate to={paths.LOGIN} replace />;
   }

@@ -1,145 +1,26 @@
 import { Quest } from "../../types/models/Quest";
-import { QuestUpdate } from "../../types/IQuestUpdate";
 import { RootState } from "../store";
-import { queryNames } from "../../constants/graphql";
-import { inputTypeNames, endpointNames } from "shared";
-import { request } from "../../helpers/graphql";
 import { ErrorState } from "../../types/fetching/ErrorState";
-import { ENV } from "../../env/env";
-import { FormValues } from "../../components/QuestForm/QuestForm";
+import { LoadingStatus } from "../../types/fetching/LoadingStatus";
+import {
+  addQuest,
+  deleteQuest,
+  loadQuest,
+  loadQuests,
+  updateQuest,
+} from "./thunks";
 import {
   createSlice,
-  createAsyncThunk,
   createEntityAdapter,
   PayloadAction,
   EntityId,
 } from "@reduxjs/toolkit";
+import {} from "./thunks";
 
 const questsAdapter = createEntityAdapter<Quest>({
   sortComparer: (a, b) =>
     a.createdAt < b.createdAt ? -1 : a.createdAt > b.createdAt ? 1 : 0,
 });
-
-const QUEST_DEFAULT_FIELDS = `
-id,
-name,
-description,
-image,
-difficulty,
-duration,
-createdAt,
-updatedAt,
-user {
-  id,
-  username
-}
-`;
-
-const QUESTS_QUERY = `
-  query ${queryNames.quests.ALL} {
-    ${endpointNames.quests.all} {
-      ${QUEST_DEFAULT_FIELDS}
-    }
-  }
-`;
-
-export const loadQuests = createAsyncThunk<Quest[]>(
-  "quests/loadQuests",
-  async () => {
-    const response = await request(apiUrl, {
-      query: QUESTS_QUERY,
-      variables: {},
-    });
-    return response.data.data[endpointNames.quests.all];
-  }
-);
-
-const QUEST_QUERY = `
-  query ${queryNames.QUEST} ($id: ID!) {
-    ${endpointNames.quests.one}(id: $id) {
-      ${QUEST_DEFAULT_FIELDS}
-    }
-  }
-`;
-
-export const loadQuest = createAsyncThunk<IQuest, EntityId>(
-  "quests/loadQuest",
-  async (id: EntityId) => {
-    const response = await request(apiUrl, {
-      query: QUEST_QUERY,
-      variables: { id },
-    });
-    return response.data.data[endpointNames.quests.one];
-  }
-);
-
-// const QUEST_DATA_INPUT_TYPE = `
-// input QuestData {
-//     name: String!,
-//     duration: Int,
-//     difficulty: QuestDifficulty!,
-//     description: String!,
-//     image: String
-// }
-// `;
-
-const QUEST_ADD_QUERY = `
-  mutation ${queryNames.ADD_QUEST} ($data: ${inputTypeNames.QUEST_DATA}!) {
-    ${endpointNames.quests.add}(data: $data) {
-      ${QUEST_DEFAULT_FIELDS}
-    }
-  }
-`;
-
-export const addQuest = createAsyncThunk<IQuest, FormValues>(
-  "quests/addQuest",
-  async (values) => {
-    const response = await request(apiUrl, {
-      query: QUEST_ADD_QUERY,
-      variables: { data: values },
-    });
-
-    return response.data.data[endpointNames.quests.add];
-  }
-);
-
-const QUEST_UPDATE_QUERY = `
-  mutation ${queryNames.UPDATE_QUEST} ($id: ID!, $data: ${inputTypeNames.QUEST_DATA}!) {
-    ${endpointNames.quests.update}(id: $id, data: $data) {
-      ${QUEST_DEFAULT_FIELDS}
-    }
-  }
-`;
-
-export const updateQuest = createAsyncThunk<
-  IQuest,
-  { id: EntityId; data: QuestUpdate }
->("quests/updateQuest", async ({ id, data }) => {
-  const response = await request(apiUrl, {
-    query: QUEST_UPDATE_QUERY,
-    variables: { id, data },
-  });
-  return response.data.data[endpointNames.quests.update];
-});
-
-const QUEST_DELETE_QUERY = `
-  mutation ${queryNames.DELETE_QUEST} ($id: ID!) {
-    ${endpointNames.quests.delete}(id: $id)
-  }
-`;
-
-export const deleteQuest = createAsyncThunk<EntityId, EntityId>(
-  "quests/deleteQuest",
-  async (id) => {
-    await request(apiUrl, {
-      query: QUEST_DELETE_QUERY,
-      variables: { id },
-    });
-    return id;
-  }
-);
-
-export type LoadingStatus = "initial" | "loading" | "failed" | "loaded";
 
 export interface QuestsAdditionalState {
   questsPage: { ids: EntityId[]; status: LoadingStatus; error: ErrorState };
@@ -178,7 +59,6 @@ export const questsSlice = createSlice({
       if (state.ids.includes(action.payload)) {
         state.selectedQuest.status = "loaded";
         state.selectedQuest.error = false;
-
         return;
       }
       state.selectedQuest.error = false;
@@ -191,7 +71,7 @@ export const questsSlice = createSlice({
     });
     builder.addCase(
       loadQuests.fulfilled,
-      (state, action: PayloadAction<IQuest[]>) => {
+      (state, action: PayloadAction<Quest[]>) => {
         questsAdapter.upsertMany(state, action.payload);
         state.questsPage.ids = action.payload.map((quest) => quest.id);
         state.questsPage.status = "loaded";
@@ -207,7 +87,7 @@ export const questsSlice = createSlice({
     });
     builder.addCase(
       loadQuest.fulfilled,
-      (state, action: PayloadAction<IQuest>) => {
+      (state, action: PayloadAction<Quest>) => {
         questsAdapter.upsertOne(state, action.payload);
         state.selectedQuest.status = "loaded";
       }
@@ -219,8 +99,7 @@ export const questsSlice = createSlice({
 
     builder.addCase(
       addQuest.fulfilled,
-      (state, action: PayloadAction<IQuest>) => {
-        console.log(action.payload);
+      (state, action: PayloadAction<Quest>) => {
         questsAdapter.upsertOne(state, action.payload);
         state.questsPage = {
           error: false,
@@ -232,7 +111,7 @@ export const questsSlice = createSlice({
 
     builder.addCase(
       updateQuest.fulfilled,
-      (state, action: PayloadAction<IQuest>) => {
+      (state, action: PayloadAction<Quest>) => {
         questsAdapter.upsertOne(state, action.payload);
       }
     );

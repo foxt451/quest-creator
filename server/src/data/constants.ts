@@ -1,7 +1,7 @@
-import { IQuest } from "../types/IQuest";
-import { IUser } from "../types/IUser";
-import { IBaseModel } from "../types/IBaseModel";
-import { IRefreshToken } from "../types/IRefreshToken";
+import { Quest } from "../types";
+import { User } from "../types";
+import { BaseModel } from "../types";
+import { RefreshToken } from "../types";
 
 export const tableNames = {
   USERS: "users",
@@ -9,10 +9,10 @@ export const tableNames = {
   REFRESH_TOKENS: "refreshTokens",
 } as const;
 
-type UserColumn = keyof IUser;
-type QuestColumn = keyof IQuest;
-type BaseColumn = keyof IBaseModel;
-type RefreshTokenColumn = keyof IRefreshToken;
+type UserColumn = keyof User;
+type QuestColumn = keyof Quest;
+type BaseColumn = keyof BaseModel;
+type RefreshTokenColumn = keyof RefreshToken;
 
 export const baseColumns: Record<BaseColumn, string> = {
   id: "id",

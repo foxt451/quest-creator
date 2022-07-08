@@ -57,7 +57,10 @@ const NavBar: FC = () => {
       <List>
         {Object.values(navItems).map(([name, link]) => (
           <ListItem key={name} disablePadding>
-            <NavLink to={link}>
+            <NavLink
+              to={link}
+              style={{ textDecoration: "inherit", color: "inherit", width: "100%" }}
+            >
               <ListItemButton sx={{ textAlign: "center" }}>
                 <ListItemText primary={name} />
               </ListItemButton>
@@ -99,7 +102,9 @@ const NavBar: FC = () => {
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {Object.values(navItems).map(([name, link]) => (
               <NavLink key={name} to={link}>
-                <Button sx={{ color: "#fff" }}>{name}</Button>
+                <Button sx={{ textDecoration: "none", color: "#fff" }}>
+                  {name}
+                </Button>
               </NavLink>
             ))}
             {user && (

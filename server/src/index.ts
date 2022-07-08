@@ -7,6 +7,7 @@ import { ENV } from "./env";
 import { Model } from "objection";
 import cors from "cors";
 import { expressjwt, Request as AuthRequest } from "express-jwt";
+import { JwtPayload } from "./types";
 
 const knexInstance = knex(knexConfig);
 Model.knex(knexInstance);
@@ -22,17 +23,22 @@ app.use(
     credentialsRequired: false,
   })
 );
+
 app.use(
   "/graphql",
-  graphqlHTTP((req, res, graphQLParams) => ({
+  graphqlHTTP((req, res) => ({
     schema: schema,
     graphiql: ENV.DEBUG,
     context: {
-      user: (req as AuthRequest).auth,
+      user: (req as AuthRequest<JwtPayload>).auth,
     },
   }))
 );
 
 app.listen(ENV.PORT, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${ENV.PORT}`);
+  console.log(
+    `⚡️[server]: Server is running${
+      ENV.DEBUG && ` at http://localhost:${ENV.PORT}`
+    }`
+  );
 });

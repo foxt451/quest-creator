@@ -7,8 +7,8 @@ const queryNames = {
     DELETE: "DeleteQuest",
   },
   profile: {
-    LOGIN_PROFILE: "LoginProfile",
-    REGISTER_PROFILE: "RegisterProfile",
+    LOGIN: "LoginProfile",
+    REGISTER: "RegisterProfile",
     REFRESH_TOKENS: "RefreshTokens",
   },
 } as const;

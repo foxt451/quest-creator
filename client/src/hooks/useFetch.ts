@@ -4,6 +4,7 @@ import { RequestConfig } from "../types/fetching/RequestConfig";
 import { LoadingHookResult } from "../types/fetching/LoadingHookResult";
 import { apiService } from "../services/api-service/api-service";
 import { errorMessages } from "../constants/messages";
+import { getMessageOfCaughtError } from "../helpers/errors";
 
 const useFetch = <TResult, TData>(
   config: RequestConfig<TData>,
@@ -20,11 +21,8 @@ const useFetch = <TResult, TData>(
       const response = await apiService.sendRequest<TResult, TData>(config);
       setData(response);
       setError(false);
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      }
-      setError(errorMessages.default);
+    } catch (e) {
+      setError(getMessageOfCaughtError(e));
     } finally {
       setLoading(false);
     }

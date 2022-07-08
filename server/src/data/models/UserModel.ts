@@ -1,9 +1,10 @@
 import { BaseModel } from "./BaseModel";
 import { JSONSchema, RelationMappings } from "objection";
 import { compare } from "../../encryption";
-import { IUser } from "../../types/IUser";
+import { User } from "../../types";
 import { QuestModel } from "./QuestModel";
 import { RefreshTokenModel } from "./RefreshTokenModel";
+import { hash } from "../../encryption";
 import {
   tableNames,
   userColumns,
@@ -11,7 +12,7 @@ import {
   refreshTokenColumns,
 } from "../constants";
 
-export interface UserModel extends IUser {}
+export interface UserModel extends User {}
 
 export class UserModel extends BaseModel {
   static get idColumn() {
@@ -57,6 +58,11 @@ export class UserModel extends BaseModel {
         },
       },
     };
+  }
+
+  async $beforeInsert() {
+    super.$beforeInsert();
+    this.password = await hash(this.password);
   }
 
   checkPassword(password: string): Promise<boolean> {

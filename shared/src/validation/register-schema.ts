@@ -1,6 +1,7 @@
-import yup, { SchemaOf } from "yup";
+import * as yup from "yup";
 import { RegisterUser } from "../types";
 import { validationConstants } from "../constants";
+import { SchemaOf } from "yup";
 const userConstants = validationConstants.user;
 
 // could be based on the schema for user in general, just adding password field

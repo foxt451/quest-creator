@@ -1,6 +1,5 @@
 import {
   GraphQLObjectType,
-  GraphQLString,
   GraphQLID,
   GraphQLNonNull,
   GraphQLList,
@@ -8,8 +7,9 @@ import {
 import { questType } from "./quest";
 import { endpointNames } from "shared";
 import { questService } from "../services/quest-service";
+import { Context } from "../types";
 
-export const queryType = new GraphQLObjectType({
+export const queryType = new GraphQLObjectType<undefined, Context>({
   name: "Query",
   fields: {
     [endpointNames.quests.all]: {

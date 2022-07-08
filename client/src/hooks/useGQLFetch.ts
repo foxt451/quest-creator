@@ -5,6 +5,7 @@ import { errorMessages } from "../constants/messages";
 import { GraphQLResponseRoot } from "../types/fetching/GQLResponse";
 import { handleGraphQLResponse } from "../helpers/graphql";
 import { LoadingHookResult } from "../types/fetching/LoadingHookResult";
+import { getMessageOfCaughtError } from "../helpers/errors";
 
 const useGQLFetch = <TResult>(
   { url = ENV.API_URL, body }: { url?: string; body: GQLRequestBody },
@@ -21,10 +22,10 @@ const useGQLFetch = <TResult>(
   try {
     const data = GQLData === null ? GQLData : handleGraphQLResponse(GQLData);
     return { data, error, loading };
-  } catch (error) {
+  } catch (e) {
     return {
       data: null,
-      error: error instanceof Error ? error.message : errorMessages.default,
+      error: getMessageOfCaughtError(e),
       loading,
     };
   }

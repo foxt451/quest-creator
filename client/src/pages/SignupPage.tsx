@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { RegisterUser } from "shared";
 import { useAppDispatch } from "../store/hooks";
 import { errorMessages } from "../constants/messages";
-import { register as registerAction } from "../store/profile/profileSlice";
+import { register as registerAction } from "../store/profile/thunks";
+import { getMessageOfCaughtError } from "../helpers/errors";
 
 const SignupPage: FC = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const SignupPage: FC = () => {
       await dispatch(registerAction(data)).unwrap();
       navigate("/");
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : errorMessages.default);
+      setError(getMessageOfCaughtError(e));
     } finally {
       setLoading(false);
     }

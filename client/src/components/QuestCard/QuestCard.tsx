@@ -4,12 +4,13 @@ import { QuestDifficulty, questDifficulties } from "shared";
 import { EntityId } from "@reduxjs/toolkit";
 import { useAppSelector } from "../../store/hooks";
 import { selectQuestById } from "../../store/quests/questsSlice";
-import { cutText } from "../../helpers";
+import { cutText } from "../../helpers/cutText";
 import { FaClock } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import { defaultImages } from "../../constants/images";
+import { images } from "../../constants/images";
 import { paths } from "../../constants/paths";
 import styles from "./styles.module.scss";
+import questStyles from "../common-styles/quest-styles.module.scss";
 
 const getDifficultyColor = (difficulty: QuestDifficulty) => {
   switch (difficulty) {
@@ -42,12 +43,12 @@ const QuestCard: FC<{ questId: EntityId }> = ({ questId }) => {
     <Paper elevation={2} sx={{ height: "100%", width: "100%" }}>
       <Box className={styles.questCard} padding={2} sx={{ height: "100%" }}>
         <img
-          src={quest.image ?? defaultImages.defaultQuestImage}
+          src={quest.image ?? images.quests.defaultImage}
           alt="quest"
-          className={styles.questImage}
+          className={questStyles.questImage}
           onError={({ currentTarget }) => {
             currentTarget.onerror = null; // prevents looping
-            currentTarget.src = defaultImages.defaultQuestImage;
+            currentTarget.src = images.quests.defaultImage;
           }}
         />
         <Divider sx={{ margin: "1rem" }}>About</Divider>
@@ -57,10 +58,17 @@ const QuestCard: FC<{ questId: EntityId }> = ({ questId }) => {
           </Typography>
         </NavLink>
         <Typography variant="subtitle2" component="p" marginTop={2}>
-          by {cutText(quest.user.username, MAX_VISIBLE_NAME_LENGTH)}
+          by{" "}
+          {cutText({
+            text: quest.user.username,
+            maxLength: MAX_VISIBLE_NAME_LENGTH,
+          })}
         </Typography>
         <Typography variant="subtitle1" component="p" marginTop={2}>
-          {cutText(quest.description, MAX_VISIBLE_DESCRIPTION_LENGTH)}
+          {cutText({
+            text: quest.description,
+            maxLength: MAX_VISIBLE_DESCRIPTION_LENGTH,
+          })}
         </Typography>
 
         <>

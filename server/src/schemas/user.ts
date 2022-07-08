@@ -5,15 +5,15 @@ import {
   GraphQLInputObjectType,
   GraphQLInt,
 } from "graphql";
-import { IUser } from "../types/IUser";
-import { inputTypeNames } from "shared";
+import { User } from "../types";
+import { Context } from "../types";
 
-export const userType = new GraphQLObjectType({
+export const userType = new GraphQLObjectType<User, Context>({
   name: "User",
   fields: {
     id: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: (parent: IUser) => parent.id.toString(),
+      resolve: (parent) => parent.id.toString(),
     },
     username: {
       type: new GraphQLNonNull(GraphQLString),

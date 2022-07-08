@@ -8,14 +8,15 @@ import {
 import { inputTypeNames } from "shared";
 import { userType } from "./user";
 import { userService } from "../services/user-service";
-import { IQuest } from "../types/IQuest";
+import { Quest } from "../types";
+import { Context } from "../types";
 
-export const questType = new GraphQLObjectType({
+export const questType = new GraphQLObjectType<Quest, Context>({
   name: "Quest",
   fields: {
     id: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: (parent: IQuest) => parent.id.toString(),
+      resolve: (parent) => parent.id.toString(),
     },
     name: {
       type: new GraphQLNonNull(GraphQLString),
@@ -34,7 +35,7 @@ export const questType = new GraphQLObjectType({
     },
     user: {
       type: new GraphQLNonNull(userType),
-      resolve: (parent: IQuest) => userService.getById(parent.userId),
+      resolve: (parent: Quest) => userService.getById(parent.userId),
     },
     createdAt: {
       type: new GraphQLNonNull(GraphQLString),

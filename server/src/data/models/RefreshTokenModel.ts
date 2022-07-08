@@ -1,11 +1,11 @@
 import { BaseModel } from "./BaseModel";
 import { JSONSchema, RelationMappings } from "objection";
-import { IRefreshToken } from "../../types/IRefreshToken";
+import { RefreshToken } from "../../types";
 import { UserModel } from "./UserModel";
 import { generateUnguessableString, hash } from "../../encryption";
 import { tableNames, userColumns, refreshTokenColumns } from "../constants";
 
-export interface RefreshTokenModel extends IRefreshToken {}
+export interface RefreshTokenModel extends RefreshToken {}
 
 export class RefreshTokenModel extends BaseModel {
   static get idColumn() {

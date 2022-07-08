@@ -5,12 +5,14 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { paths } from "../../constants/paths";
-import { defaultImages } from "../../constants/images";
-import { selectQuestById, deleteQuest } from "../../store/quests/questsSlice";
+import { images } from "../../constants/images";
+import styles from "./styles.module.scss";
+import { selectQuestById } from "../../store/quests/questsSlice";
+import { deleteQuest } from "../../store/quests/thunks";
 import { selectUser } from "../../store/profile/profileSlice";
 import { Box, Typography, Divider, Fab } from "@mui/material";
-
-import styles from "./styles.module.scss";
+import questStyles from "../common-styles/quest-styles.module.scss";
+import { getMessageOfCaughtError } from "../../helpers/errors";
 
 const QuestDetails: FC<{ questId: EntityId }> = ({ questId }) => {
   const user = useAppSelector(selectUser);
@@ -25,8 +27,8 @@ const QuestDetails: FC<{ questId: EntityId }> = ({ questId }) => {
     try {
       await dispatch(deleteQuest(questId)).unwrap();
       navigate(paths.QUESTS);
-    } catch (e: any) {
-      setError(e?.message ?? "Unknown error. Try again");
+    } catch (e: unknown) {
+      setError(getMessageOfCaughtError(e));
     } finally {
       setDeleting(false);
     }
@@ -41,10 +43,10 @@ const QuestDetails: FC<{ questId: EntityId }> = ({ questId }) => {
         <img
           src={quest.image}
           alt="quest"
-          className={styles.questImage}
+          className={questStyles.questImage}
           onError={({ currentTarget }) => {
             currentTarget.onerror = null; // prevents looping
-            currentTarget.src = defaultImages.defaultQuestImage;
+            currentTarget.src = images.quests.defaultImage;
           }}
         />
       )}
@@ -57,7 +59,7 @@ const QuestDetails: FC<{ questId: EntityId }> = ({ questId }) => {
         {quest.description}
       </Typography>
       {user?.id === quest.user.id && (
-        <Box>
+        <Box className={styles.controlButtons}>
           <NavLink to={`${paths.QUESTS}/${questId}${paths.UPDATE}`}>
             <Fab color="primary" aria-label="create">
               <FaEdit />

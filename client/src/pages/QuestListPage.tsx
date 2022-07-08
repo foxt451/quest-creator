@@ -1,9 +1,9 @@
 import { FC, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
-import { loadQuests } from "../store/quests/questsSlice";
+import { loadQuests } from "../store/quests/thunks";
 import { Fab } from "@mui/material";
 import { FaPlus } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { paths } from "../constants/paths";
 import ErrorBox from "../components/ErrorBox";
 import { errorMessages } from "../constants/messages";
@@ -32,11 +32,11 @@ const QuestListPage: FC = () => {
   return (
     <>
       <div style={{ position: "relative", top: "2rem", right: "1rem" }}>
-        <NavLink to={`${paths.QUESTS}${paths.CREATE}`}>
+        <Link to={`${paths.QUESTS}${paths.CREATE}`}>
           <Fab color="primary" aria-label="create">
             <FaPlus />
           </Fab>
-        </NavLink>
+        </Link>
       </div>
       <QuestList questIds={questIds} />
     </>

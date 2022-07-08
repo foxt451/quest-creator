@@ -1,9 +1,11 @@
 import { GraphQLSchema } from "graphql";
 import { queryType } from "./query";
 import { mutationType } from "./mutation";
-import { applyMiddleware } from "graphql-middleware";
+import { applyMiddleware, IMiddleware } from "graphql-middleware";
 import { endpointNames } from "shared";
 import { shield, rule, allow } from "graphql-shield";
+import { errorMessages } from "../errors";
+import { Context } from "../types";
 
 const initialSchema = new GraphQLSchema({
   query: queryType,
@@ -11,11 +13,11 @@ const initialSchema = new GraphQLSchema({
 });
 
 const isAuthenticated = rule({ cache: "contextual" })(
-  async (parent, args, ctx, info) => {
+  async (parent, args, ctx: Context, info) => {
     if (ctx.user) {
       return true;
     }
-    return new Error("You must be logged in to perform this action");
+    return new Error(errorMessages.NOT_LOGGED);
   }
 );
 

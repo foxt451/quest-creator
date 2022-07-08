@@ -1,16 +1,12 @@
+import { Alert } from "@mui/material";
 import React, { FC } from "react";
-import { FaBan } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const NotFoundPage: FC = () => {
   return (
-    <div>
-      <FaBan />
-      <br />
-      Oops.. This path doesn&apos;t exist.
-      <br />
-      <NavLink to="/">Go to main page</NavLink>
-    </div>
+    <Alert severity="error">
+      Oops.. This path doesn&apos;t exist. <Link to="/">Go to main page</Link>
+    </Alert>
   );
 };
 

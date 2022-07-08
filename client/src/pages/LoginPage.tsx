@@ -4,8 +4,9 @@ import { LoginUser } from "shared";
 import ErrorBox from "../components/ErrorBox";
 import LoginForm from "../components/LoginForm";
 import { errorMessages } from "../constants/messages";
+import { getMessageOfCaughtError } from "../helpers/errors";
 import { useAppDispatch } from "../store/hooks";
-import { login } from "../store/profile/profileSlice";
+import { login } from "../store/profile/thunks";
 
 const LoginPage: FC = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const LoginPage: FC = () => {
       await dispatch(login(data)).unwrap();
       navigate("/");
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : errorMessages.default);
+      setError(getMessageOfCaughtError(e));
     } finally {
       setLoading(false);
     }

@@ -1,11 +1,11 @@
 import { BaseModel } from "./BaseModel";
-import { IQuest } from "../../types/IQuest";
+import { Quest } from "../../types";
 import { tableNames, questColumns, userColumns } from "../constants";
 import { RelationMappings, JSONSchema } from "objection";
 import { UserModel } from "./UserModel";
 import { questDifficulties } from "shared";
 
-export interface QuestModel extends IQuest {}
+export interface QuestModel extends Quest {}
 
 export class QuestModel extends BaseModel {
   static get idColumn() {

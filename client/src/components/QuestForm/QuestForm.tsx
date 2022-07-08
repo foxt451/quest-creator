@@ -26,7 +26,10 @@ const QuestForm: FC<{
     handleSubmit,
     formState: { errors },
   } = useForm<QuestData>({
-    defaultValues: initialValues,
+    defaultValues: {
+      ...initialValues,
+      duration: initialValues.duration ? initialValues.duration / 60 : 0,
+    },
   });
   const [durationMore, setDurationMore] = useState(
     initialValues.duration === null

@@ -1,15 +1,12 @@
-import {
-  logout,
-  removeAccessToken,
-  refreshTokens,
-} from "../../store/profile/profileSlice";
+import { logout, removeAccessToken } from "../../store/profile/profileSlice";
+import { refreshTokens } from "../../store/profile/thunks";
 import { store } from "../../store/store";
 import axios, { AxiosInstance } from "axios";
 
 export const instance: AxiosInstance = axios.create();
 
 instance.interceptors.request.use(function (config) {
-  const token = store.getState().profile.authInfo.accessToken;
+  const token = store.getState().profile.tokens.accessToken;
   if (token) {
     if (!config.headers) {
       config.headers = {};
@@ -28,7 +25,10 @@ instance.interceptors.response.use(
       if (error.response && error.response.status === 401) {
         store.dispatch(removeAccessToken());
         // try to refresh token and repeat request if successful
-        const { refreshToken, userId } = store.getState().profile.authInfo;
+        const { refreshToken } = store.getState().profile.tokens;
+        const userId = store.getState().profile.user
+          ? store.getState().profile.user?.id
+          : null;
         if (refreshToken && userId) {
           try {
             const tokens = await store

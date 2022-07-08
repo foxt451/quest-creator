@@ -1,12 +1,9 @@
 import {
   GraphQLObjectType,
-  GraphQLString,
-  GraphQLNonNull,
-  GraphQLInputObjectType,
-  GraphQLInt,
+  GraphQLNonNull
 } from "graphql";
 import { authService } from "../services/auth-sevice";
-import { IUser } from "../types/IUser";
+import { User } from "../types";
 import { userType } from "./user";
 import { tokensType } from "./tokens";
 
@@ -15,11 +12,11 @@ export const authInfoType = new GraphQLObjectType({
   fields: {
     tokens: {
       type: new GraphQLNonNull(tokensType),
-      resolve: (parent: IUser) => authService.generateTokens(parent.id),
+      resolve: (parent: User) => authService.generateTokens(parent.id),
     },
     user: {
       type: new GraphQLNonNull(userType),
-      resolve: (parent: IUser) => parent,
+      resolve: (parent: User) => parent,
     },
   },
 });

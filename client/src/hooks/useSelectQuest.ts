@@ -4,10 +4,10 @@ import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   designateAsSelected,
-  LoadingStatus,
-  loadQuest,
   selectQuestById,
 } from "../store/quests/questsSlice";
+import { LoadingStatus } from "../types/fetching/LoadingStatus";
+import { loadQuest } from "../store/quests/thunks";
 import { ErrorState } from "../types/fetching/ErrorState";
 
 export const useSelectQuest = (

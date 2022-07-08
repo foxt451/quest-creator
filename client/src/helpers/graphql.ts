@@ -22,8 +22,11 @@ export const handleGraphQLResponse = <TResult>(
   response: GraphQLResponseRoot<TResult>
 ): TResult => {
   if (response.errors || response.data === undefined) {
-    throw new Error(errorMessages.default);
+    let errorMessage: string = errorMessages.default;
+    if (response.errors && response.errors.length > 0) {
+      errorMessage = response.errors[0].message;
+    }
+    throw new Error(errorMessage);
   }
-
   return response.data;
 };

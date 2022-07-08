@@ -12,6 +12,8 @@ export const registerSchema: SchemaOf<RegisterUser> = yup.object().shape({
     .string()
     .min(userConstants.username.MIN_LENGTH)
     .max(userConstants.username.MAX_LENGTH)
+    .trim()
+    .matches(/^[a-z0-9]+$/i, { message: "Username must be alphanumeric" })
     .required(),
   email: yup.string().email().required(),
   password: yup
@@ -19,4 +21,4 @@ export const registerSchema: SchemaOf<RegisterUser> = yup.object().shape({
     .min(userConstants.password.MIN_LENGTH)
     .max(userConstants.password.MAX_LENGTH)
     .required(),
-});
+}).required();

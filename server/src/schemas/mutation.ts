@@ -5,7 +5,12 @@ import {
   GraphQLNonNull,
   GraphQLInt,
 } from "graphql";
-import { endpointNames, loginSchema, registerSchema } from "shared";
+import {
+  endpointNames,
+  loginSchema,
+  registerSchema,
+  questSchema,
+} from "shared";
 import { questType, questInputType } from "./quest";
 import { authInfoType } from "./authInfo";
 import { questService } from "../services/quest-service";
@@ -24,8 +29,14 @@ export const mutationType = new GraphQLObjectType<undefined, Context>({
           type: new GraphQLNonNull(questInputType),
         },
       },
-      resolve: (_, { data }, ctx) =>
-        questService.addQuest(data, Number(ctx.user!.id)),
+      resolve: async (_, { data }, ctx) => {
+        console.log("hmmm", data);
+        
+        const quest = await questSchema.validate(data);
+        console.log(quest);
+        
+        return questService.addQuest(quest, Number(ctx.user!.id));
+      },
     },
     [endpointNames.quests.delete]: {
       args: {
@@ -53,7 +64,8 @@ export const mutationType = new GraphQLObjectType<undefined, Context>({
       resolve: async (_, { id, data }, ctx) => {
         const ownerId = await questService.getOwnerId(Number(id));
         ownsData(ownerId, ctx.user?.id);
-        return questService.updateQuest(Number(id), data);
+        const quest = await questSchema.validate(data);
+        return questService.updateQuest(Number(id), quest);
       },
     },
     [endpointNames.profile.login]: {

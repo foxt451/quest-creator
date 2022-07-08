@@ -15,6 +15,7 @@ export const validationConstants = {
       MAX_LENGTH: 50,
     },
     description: {
+      MIN_LENGTH: 0,
       MAX_LENGTH: 500,
     },
   },
